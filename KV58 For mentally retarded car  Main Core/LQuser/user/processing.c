@@ -30,6 +30,7 @@ int AD_cha=0;
 int flag1=0;
 int flag2=0;
 int flag3=0;
+int flag4=0;
 /*****************************************************************/
 
 /*****************************Graph*******************************/
@@ -80,20 +81,20 @@ int DataFusion(){
   GetBinarizationValue();              //二值化图像数据
   GraphProcessing();
 
+servo = servoMedian - PIDPositional(ElectromagnetismProcessingOfBasics(), &PIDServoOfElectromagnetism);
+ // if(0){
 
-  if(0){
+  //  servo = servoMedian - PIDPositional(ElectromagnetismProcessingOfIsland(), &PIDServoOfElectromagnetism);
+ // }else if(0){
+  //  servo = servoMedian - PIDPositional(ElectromagnetismProcessingOfIsland(), &PIDServoOfElectromagnetism);
 
-    servo = servoMedian - PIDPositional(ElectromagnetismProcessingOfIsland(), &PIDServoOfElectromagnetism);
-  }else if(0){
-    servo = servoMedian - PIDPositional(ElectromagnetismProcessingOfIsland(), &PIDServoOfElectromagnetism);
-
-  }else if(!isEdgeLeft[LINE] && !isEdgeLeft[LINE]){
-    servo = servoMedian - PIDPositional(ElectromagnetismProcessingOfBasics(), &PIDServoOfElectromagnetism);
-    BEE_ON;
-  }else{
-    servo = servoMedian + PIDFuzzy(&graphic, &PIDServoOfGraph);
-    BEE_OFF;
-  }
+ // }else if(!isEdgeLeft[LINE] && !isEdgeLeft[LINE]){
+   // servo = servoMedian - PIDPositional(ElectromagnetismProcessingOfBasics(), &PIDServoOfElectromagnetism);
+  //  BEE_ON;
+ // }else{
+  //  servo = servoMedian + PIDFuzzy(&graphic, &PIDServoOfGraph);
+   // BEE_OFF;
+ // }
   if(IsGraphProcessingOfFinishLine()){
     isStop = true;
   }
@@ -735,6 +736,7 @@ int ElectromagnetismProcessing(){
 }
 
 int ElectromagnetismProcessingOfBasics(){
+  
 
   inductance.deviationLast = inductance.deviationNow;
   //inductance.deviationNow = (int)(ADC0_Ave(L_1,ADC_16bit,10)-ADC0_Ave(L_6,ADC_16bit,10)+ADC0_Ave(L_3,ADC_16bit,10)-ADC0_Ave(L_4,ADC_16bit,10))*10000
@@ -770,6 +772,17 @@ int ElectromagnetismProcessingOfBasics(){
     AD_sum=ADvalue[0]+ADvalue[1]+ADvalue[3]+ADvalue[4];
 
        inductance.deviationNow=-((AD_cha*19000)/AD_sum);
+       
+       if(PTC15_OUT==1) 
+       {
+         flag4++;
+         if(flag4>=10)
+         {
+         inductance.deviationNow=-15;
+           BEE_ON;
+         return inductance.deviationNow;
+         }
+       }
 
 
 

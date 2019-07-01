@@ -10,6 +10,7 @@
 extern uint16_t ADvalue[6],AD_Data[6];
 extern int AD_cha;
 extern int AD_sum;
+extern int flag4;
 
 #define L_0 ADC0_DP1
 #define L_3 ADC0_SE5a

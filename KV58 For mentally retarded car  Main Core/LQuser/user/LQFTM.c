@@ -1539,21 +1539,21 @@ void Motor_Duty(u16 Motno, int duty){
     switch(Motno){
     case MotR:
       if(duty > 0){
-        FTM_CnV_REG(FTM0, FTM_CH0) = 0;  //电机
-        FTM_CnV_REG(FTM0, FTM_CH1) = duty;
+        FTM_CnV_REG(FTM0, FTM_CH0) = duty;  //电机
+        FTM_CnV_REG(FTM0, FTM_CH1) = 0;
       }else{
-        FTM_CnV_REG(FTM0, FTM_CH1) = 0;  //电机
-        FTM_CnV_REG(FTM0, FTM_CH0) = -duty;  //电机
+        FTM_CnV_REG(FTM0, FTM_CH1) = -duty;  //电机
+        FTM_CnV_REG(FTM0, FTM_CH0) = 0;  //电机
       }
       break;
 
     case MotL:
       if(duty > 0){
-        FTM_CnV_REG(FTM0, FTM_CH2) = duty;  //电机
-        FTM_CnV_REG(FTM0, FTM_CH3) = 0;  //电机
-      }else{
-        FTM_CnV_REG(FTM0, FTM_CH3) = -duty;  //电机
         FTM_CnV_REG(FTM0, FTM_CH2) = 0;  //电机
+        FTM_CnV_REG(FTM0, FTM_CH3) = duty;  //电机
+      }else{
+        FTM_CnV_REG(FTM0, FTM_CH3) = 0;  //电机
+        FTM_CnV_REG(FTM0, FTM_CH2) = -duty;  //电机
       }
       break;
 
