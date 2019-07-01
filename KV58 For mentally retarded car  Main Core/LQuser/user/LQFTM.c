@@ -1518,7 +1518,7 @@ void Servo_Init(void)
 {
    //舵机频率：275M/2/(2^7)/21484.375=50HZ,FTM3硬件报错
    //舵机频率：275M/2/(2^7)/20000=54HZ,FTM3硬件报错
-   ServoFTM_PWM_Init(FTM3,FTM_CH7,40000,Servo_Middle);//Mot11-PTC11    舵机方向左边大右边小
+   ServoFTM_PWM_Init(FTM3,FTM_CH3,40000,Servo_Middle);//Mot11-PTC11    舵机方向左边大右边小
    ServoFTM_PWM_Init(FTM3,FTM_CH6,40000,Servo_Middle);
 }
 /*LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL
@@ -1579,7 +1579,7 @@ void Servo_Duty(u32 duty)
   //归一化为2500--12500
   //if((duty>2500)&&(duty<12500))
   { 
-    FTM_CnV_REG(FTM3, FTM_CH7) = duty;  //舵机，用PTC11
+    FTM_CnV_REG(FTM3, FTM_CH3) = duty;  //舵机，用PTC11
     //FTM_CnV_REG(FTM3, FTM_CH6) = duty;  //舵机，用PTC10
   }
 }

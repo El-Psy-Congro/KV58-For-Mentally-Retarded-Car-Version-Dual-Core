@@ -55,11 +55,11 @@ QQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQ*/
 #define FTM3_CH7    PTC11       // PTE12、PTC11
 
 //正交解码模块通道  端口          可选范围
-#define FTM1_QDPHA  PTA12       //PTA8、PTA12、PTB0 PTE20
-#define FTM1_QDPHB  PTA13       //PTA9、PTA13、PTB1 PTE21
+#define FTM1_QDPHA  PTB0       //PTA8、PTA12、PTB0 PTE20
+#define FTM1_QDPHB  PTB1       //PTA9、PTA13、PTB1 PTE21
 
-#define FTM2_QDPHA  PTB18       //PTA10、PTB18 PTE22 PTA1
-#define FTM2_QDPHB  PTB19       //PTA11、PTB19 PTE23 PTA2
+#define FTM2_QDPHA  PTA10       //PTA10、PTB18 PTE22 PTA1
+#define FTM2_QDPHB  PTA11       //PTA11、PTB19 PTE23 PTA2
 
 /**********************************  FTM(引脚复用) ***************************************/
 typedef enum

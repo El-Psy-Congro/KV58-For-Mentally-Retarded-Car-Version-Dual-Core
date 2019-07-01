@@ -12,7 +12,7 @@ int coding;
  */
 int CodingSwitch(FTM_Type * ftmn, u8 threshold){
   gear = 0;
-  if(!GPIO_Get(PTC6)){
+  if(!GPIO_Get(PTB20)){
     coding = FTM_AB_Get(ftmn);
     if(coding > 0){
       while(coding > threshold){
@@ -27,7 +27,7 @@ int CodingSwitch(FTM_Type * ftmn, u8 threshold){
       }
     }
     PIDMotorLeft.sumError = 0;
-    PIDMotorRight.sumError = 0;
+    PIDMotorRight.sumError = 0; 
   }
 
   time_delay_ms(20);

@@ -18,7 +18,7 @@ void OLEDMenuOfADCshow();
 void OLEDMenuOfADCMedia();
 void OLEDMenuOfSpeedMeasure();
 void OLEDMenuOfERECT();
-
+                                                        
 
 /****************TFT1.8²Ëµ¥Ò³ÏÔÊ¾º¯Êý**************/
 void TFTMenuOfMT9V034();

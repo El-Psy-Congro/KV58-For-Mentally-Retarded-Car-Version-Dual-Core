@@ -41,13 +41,15 @@ char txt[16];
  */
 void MenuInit(){
   if(monitorSelection == OLED){
-    //OLED的菜单页放这里
+    //OLED的菜单页放这里  
+        MenuPageAdd(OLEDMenuOfMotorLeft);
+    MenuPageAdd(OLEDMenuOfMotorRight);
     MenuPageAdd(OLEDMenuOfCameraImage);
     MenuPageAdd(OLEDMenuOfGraphPID);
     MenuPageAdd(OLEDMenuOfElectromagnetismPID);
 //    MenuPageAdd(OLEDMenuOfMotor);
-    MenuPageAdd(OLEDMenuOfMotorLeft);
-    MenuPageAdd(OLEDMenuOfMotorRight);
+
+
 //    MenuPageAdd(OLEDMenuOfERECT);
     MenuPageAdd(OLEDMenuOfGyro);
     MenuPageAdd(OLEDMenuOfADCshow);
