@@ -2148,6 +2148,12 @@
             <name>$PROJ_DIR$\LQuser\user\PID.h</name>
         </file>
         <file>
+            <name>$PROJ_DIR$\LQuser\user\PMU.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\LQuser\user\PMU.h</name>
+        </file>
+        <file>
             <name>$PROJ_DIR$\LQuser\user\processing.c</name>
         </file>
         <file>

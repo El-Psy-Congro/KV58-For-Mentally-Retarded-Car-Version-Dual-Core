@@ -1,49 +1,49 @@
-"D:\Project\Mentally retarded car\KV58 For mentally retarded car\KV58 For mentally retarded car Version Dual Core\LQuser\user\LQMT9V034.c"
+"D:\Project\Mentally retarded car\KV58 For mentally retarded car\KV58 For mentally retarded car  Main Core\LQuser\user\LQMT9V034.c"
 -std=c11
 -ferror-limit=0
 -fbracket-depth=512
 -I
-D:\Project\Mentally retarded car\KV58 For mentally retarded car\KV58 For mentally retarded car Version Dual Core/LQuser/devices/include
+D:\Project\Mentally retarded car\KV58 For mentally retarded car\KV58 For mentally retarded car  Main Core/LQuser/devices/include
 -I
-D:\Project\Mentally retarded car\KV58 For mentally retarded car\KV58 For mentally retarded car Version Dual Core/LQuser/devices/startup
+D:\Project\Mentally retarded car\KV58 For mentally retarded car\KV58 For mentally retarded car  Main Core/LQuser/devices/startup
 -I
-D:\Project\Mentally retarded car\KV58 For mentally retarded car\KV58 For mentally retarded car Version Dual Core/LQuser/devices
+D:\Project\Mentally retarded car\KV58 For mentally retarded car\KV58 For mentally retarded car  Main Core/LQuser/devices
 -I
-D:\Project\Mentally retarded car\KV58 For mentally retarded car\KV58 For mentally retarded car Version Dual Core/LQuser/drivers/inc
+D:\Project\Mentally retarded car\KV58 For mentally retarded car\KV58 For mentally retarded car  Main Core/LQuser/drivers/inc
 -I
-D:\Project\Mentally retarded car\KV58 For mentally retarded car\KV58 For mentally retarded car Version Dual Core/LQuser/drivers/src
+D:\Project\Mentally retarded car\KV58 For mentally retarded car\KV58 For mentally retarded car  Main Core/LQuser/drivers/src
 -I
-D:\Project\Mentally retarded car\KV58 For mentally retarded car\KV58 For mentally retarded car Version Dual Core/LQuser/osa
+D:\Project\Mentally retarded car\KV58 For mentally retarded car\KV58 For mentally retarded car  Main Core/LQuser/osa
 -I
-D:\Project\Mentally retarded car\KV58 For mentally retarded car\KV58 For mentally retarded car Version Dual Core/LQuser/system
+D:\Project\Mentally retarded car\KV58 For mentally retarded car\KV58 For mentally retarded car  Main Core/LQuser/system
 -I
-D:\Project\Mentally retarded car\KV58 For mentally retarded car\KV58 For mentally retarded car Version Dual Core/LQuser/user
+D:\Project\Mentally retarded car\KV58 For mentally retarded car\KV58 For mentally retarded car  Main Core/LQuser/user
 -I
-D:\Project\Mentally retarded car\KV58 For mentally retarded car\KV58 For mentally retarded car Version Dual Core/LQuser/utilities
+D:\Project\Mentally retarded car\KV58 For mentally retarded car\KV58 For mentally retarded car  Main Core/LQuser/utilities
 -I
-D:\Project\Mentally retarded car\KV58 For mentally retarded car\KV58 For mentally retarded car Version Dual Core/../../..
+D:\Project\Mentally retarded car\KV58 For mentally retarded car\KV58 For mentally retarded car  Main Core/../../..
 -I
 D:\Program Files (x86)\IAR Systems\Embedded Workbench 8.0\arm\inc
 -I
 D:\Program Files (x86)\IAR Systems\Embedded Workbench 8.0\arm\inc\c
 -I
-D:\Project\Mentally retarded car\KV58 For mentally retarded car\KV58 For mentally retarded car Version Dual Core\LQuser\devices\include
+D:\Project\Mentally retarded car\KV58 For mentally retarded car\KV58 For mentally retarded car  Main Core\LQuser\devices\include
 -I
-D:\Project\Mentally retarded car\KV58 For mentally retarded car\KV58 For mentally retarded car Version Dual Core\LQuser\devices\startup
+D:\Project\Mentally retarded car\KV58 For mentally retarded car\KV58 For mentally retarded car  Main Core\LQuser\devices\startup
 -I
-D:\Project\Mentally retarded car\KV58 For mentally retarded car\KV58 For mentally retarded car Version Dual Core\LQuser\devices
+D:\Project\Mentally retarded car\KV58 For mentally retarded car\KV58 For mentally retarded car  Main Core\LQuser\devices
 -I
-D:\Project\Mentally retarded car\KV58 For mentally retarded car\KV58 For mentally retarded car Version Dual Core\LQuser\drivers\inc
+D:\Project\Mentally retarded car\KV58 For mentally retarded car\KV58 For mentally retarded car  Main Core\LQuser\drivers\inc
 -I
-D:\Project\Mentally retarded car\KV58 For mentally retarded car\KV58 For mentally retarded car Version Dual Core\LQuser\drivers\src
+D:\Project\Mentally retarded car\KV58 For mentally retarded car\KV58 For mentally retarded car  Main Core\LQuser\drivers\src
 -I
-D:\Project\Mentally retarded car\KV58 For mentally retarded car\KV58 For mentally retarded car Version Dual Core\LQuser\osa
+D:\Project\Mentally retarded car\KV58 For mentally retarded car\KV58 For mentally retarded car  Main Core\LQuser\osa
 -I
-D:\Project\Mentally retarded car\KV58 For mentally retarded car\KV58 For mentally retarded car Version Dual Core\LQuser\system
+D:\Project\Mentally retarded car\KV58 For mentally retarded car\KV58 For mentally retarded car  Main Core\LQuser\system
 -I
-D:\Project\Mentally retarded car\KV58 For mentally retarded car\KV58 For mentally retarded car Version Dual Core\LQuser\user
+D:\Project\Mentally retarded car\KV58 For mentally retarded car\KV58 For mentally retarded car  Main Core\LQuser\user
 -I
-D:\Project\Mentally retarded car\KV58 For mentally retarded car\KV58 For mentally retarded car Version Dual Core\LQuser\utilities
+D:\Project\Mentally retarded car\KV58 For mentally retarded car\KV58 For mentally retarded car  Main Core\LQuser\utilities
 -I
 D:\Project
 -D__CHAR_BITS__=8

@@ -9,7 +9,7 @@
 #define LINE_EDGE_RIGHT 92                //右边界扫描终点
 #define HEI 1
 #define BAI 0
-#define LINE 40                           //当前使用行
+
 /*****************************************************************/
 
 int servoMedian = 5250, graphMedian = 0, servo = 0, angle = 0, gyroLast = 0;
@@ -34,6 +34,8 @@ int flag4=0;
 /*****************************************************************/
 
 /*****************************Graph*******************************/
+u8 line=40;                           //当前使用行;
+
 s8
   edgeLeft[GRAPH_HIGHT],
   edgeRight[GRAPH_HIGHT],               //左右边界
@@ -81,29 +83,36 @@ int DataFusion(){
   GetBinarizationValue();              //二值化图像数据
   GraphProcessing();
 
-servo = servoMedian - PIDPositional(ElectromagnetismProcessingOfBasics(), &PIDServoOfElectromagnetism);
- // if(0){
+  if(0){
 
-  //  servo = servoMedian - PIDPositional(ElectromagnetismProcessingOfIsland(), &PIDServoOfElectromagnetism);
- // }else if(0){
-  //  servo = servoMedian - PIDPositional(ElectromagnetismProcessingOfIsland(), &PIDServoOfElectromagnetism);
+    servo = servoMedian - PIDPositional(ElectromagnetismProcessingOfIsland(), &PIDServoOfElectromagnetism);
+  }else if(0){
+    servo = servoMedian - PIDPositional(ElectromagnetismProcessingOfIsland(), &PIDServoOfElectromagnetism);
 
- // }else if(!isEdgeLeft[LINE] && !isEdgeLeft[LINE]){
-   // servo = servoMedian - PIDPositional(ElectromagnetismProcessingOfBasics(), &PIDServoOfElectromagnetism);
-  //  BEE_ON;
- // }else{
-  //  servo = servoMedian + PIDFuzzy(&graphic, &PIDServoOfGraph);
-   // BEE_OFF;
- // }
+  }else if(){//
+    servo = servoMedian - PIDPositional(ElectromagnetismProcessingOfBasics(), &PIDServoOfElectromagnetism);
+//    BEE_ON;
+  }else{
+    servo = servoMedian + PIDFuzzy(&graphic, &PIDServoOfGraph);
+    BEE_OFF;
+  }
   if(IsGraphProcessingOfFinishLine()){
     isStop = true;
   }
     
-//  GraphProcessingOfEnteringStraightLaneAccelerate();
-//
-//  DifferentialSpeed();
+  GraphProcessingOfEnteringStraightLaneAccelerate();
+
+  DifferentialSpeed();
   
 
+}
+
+bool isModeSwitch(){
+  if(!isEdgeLeft[line] && !isEdgeLeft[line] && GraphProcessingOfLineWhitePointCounting(line, 4, 92)){
+    return true;
+  }else{
+    return false;
+  }
 }
 /*
  * 差速计算
@@ -232,7 +241,7 @@ int GraphProcessingOfEdgeFluctuation(){
 //  IsStaightLine(edgeRight, isEdgeRight, 50, 30, 3, 0.5);
 
   for(int i = GRAPH_WIDTH; i > 0; i--){
-    graph[LINE][i] = 0;
+    graph[line][i] = 0;
     graph[LINE_MEDIAN][i] = 0;
     graph[LINE_INITIAL][i] = 0;
     graph[LINE_TERMINATION][i] = 0;
@@ -245,17 +254,17 @@ int GraphProcessingOfEdgeFluctuation(){
 //    }
 //  }
 
-  if(isEdgeLeft[LINE] && !isEdgeRight[LINE]){
-    graph[LINE][LimitingAmplitudeVersionReturn(edgeLeft[LINE] + laneWidth[LINE], 0, 93)] = 0;             //oled显示观测点
-    return LimitingAmplitudeVersionReturn(edgeLeft[LINE] + laneWidth[LINE], 0, 93);
-  }else if(!isEdgeLeft[LINE] && isEdgeRight[LINE]){
-    graph[LINE][LimitingAmplitudeVersionReturn(edgeRight[LINE] - laneWidth[LINE], 0, 93)] = 0;
-    return LimitingAmplitudeVersionReturn(edgeRight[LINE] - laneWidth[LINE], 0, 93);
+  if(isEdgeLeft[line] && !isEdgeRight[line]){
+    graph[line][LimitingAmplitudeVersionReturn(edgeLeft[line] + laneWidth[line], 0, 93)] = 0;             //oled显示观测点
+    return LimitingAmplitudeVersionReturn(edgeLeft[line] + laneWidth[line], 0, 93);
+  }else if(!isEdgeLeft[line] && isEdgeRight[line]){
+    graph[line][LimitingAmplitudeVersionReturn(edgeRight[line] - laneWidth[line], 0, 93)] = 0;
+    return LimitingAmplitudeVersionReturn(edgeRight[line] - laneWidth[line], 0, 93);
   }
 //  for(int i = ){
 //  }
-  graph[LINE][graphicMedian[LINE]] = 0;
-  return graphicMedian[LINE];
+  graph[line][graphicMedian[line]] = 0;
+  return graphicMedian[line];
 }
 
 void GraphProcessingOfLineScanFromMedian(int i){
@@ -543,14 +552,16 @@ void GraphProcessingOfEnteringStraightLaneAccelerate(){
 
   if(isStop){
     PIDMotor.setPoint = 0;
-    BEE_ON;
+    BEE_OFF;
   }else if(IsStraightLane()){
-//   BEE_ON;
-    PIDMotor.setPoint = 170;
-    PIDServoOfGraph.proportion = 12;  //0.27
+   BEE_ON;
+    line = 25;
+    PIDMotor.setPoint = 180;
+    PIDServoOfGraph.proportion = 6;  //0.27
   }else if(!ElectromagnetismProcessingOfLoseDataForStop()){
-//    BEE_OFF;
+    BEE_OFF;
     PIDMotor.setPoint = 100;
+    line = 40;
     PIDServoOfGraph.proportion = 9;  //0.27
   }else{
     PIDMotor.setPoint = 0;
@@ -779,7 +790,7 @@ int ElectromagnetismProcessingOfBasics(){
          if(flag4>=10)
          {
          inductance.deviationNow=-15;
-           BEE_ON;
+//           BEE_ON;
          return inductance.deviationNow;
          }
        }
@@ -812,7 +823,7 @@ bool ElectromagnetismProcessingOfIsland(){
 
   if(flag3>0&&AD_Data0>24000&&AD_Data3>24000)
   {
-      BEE_ON;
+//      BEE_ON;
       return true;
 
   }else{

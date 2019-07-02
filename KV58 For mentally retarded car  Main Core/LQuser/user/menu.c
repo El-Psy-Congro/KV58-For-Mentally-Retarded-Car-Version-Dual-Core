@@ -78,10 +78,10 @@ void Menu(){
   /*
    * ±àÂë¿ª¹Ø
    */
-  if(CodingSwitch(speedLeftGet, THRESHOLDOFPAGE) < 0){
+  if(CodingSwitch(speedRightGet, THRESHOLDOFPAGE) < 0){
     menus = menus->last;
     LCD_CLS();
-  }else if(CodingSwitch(speedLeftGet, THRESHOLDOFPAGE) > 0){
+  }else if(CodingSwitch(speedRightGet, THRESHOLDOFPAGE) > 0){
     menus = menus->next;
     LCD_CLS();
   }
@@ -172,7 +172,7 @@ void OLEDMenuOfERECT(){
 /****
 ±àÂë
 **/
-  adjust = CodingSwitch(speedRightGet, THRESHOLDOFADJUST);
+  adjust = CodingSwitch(speedLeftGet, THRESHOLDOFADJUST);
   if(adjust){
     if(menuSwitch == 0){
       PIDErect.proportion += adjust*VARIATION_ERECT;
@@ -231,7 +231,7 @@ void OLEDMenuOfMotor(){
 /***
 ±àÂë
 **/
-  adjust = CodingSwitch(speedRightGet, THRESHOLDOFADJUST);
+  adjust = CodingSwitch(speedLeftGet, THRESHOLDOFADJUST);
   if(adjust){
     if(menuSwitch == 0){
       PIDMotor.proportion += adjust*VARIATION_SPEED_PID;
@@ -294,7 +294,7 @@ void OLEDMenuOfMotorRight(){
 /**
 ±àÂë
 **/
-  adjust = CodingSwitch(speedRightGet, THRESHOLDOFADJUST);
+  adjust = CodingSwitch(speedLeftGet, THRESHOLDOFADJUST);
   if(adjust){
     if(menuSwitch == 0){
       PIDMotorRight.proportion += adjust*VARIATION_SPEED_PID;
@@ -352,7 +352,7 @@ void OLEDMenuOfMotorLeft(){
 /***
 /**±àÂë*
 **/
-  adjust = CodingSwitch(speedRightGet, THRESHOLDOFADJUST);
+  adjust = CodingSwitch(speedLeftGet, THRESHOLDOFADJUST);
   if(adjust){
     if(menuSwitch == 0){
       PIDMotorLeft.proportion += adjust*VARIATION_SPEED_PID;
@@ -408,7 +408,7 @@ void OLEDMenuOfGraphPID(){
   /*
    * ±àÂë¿ª¹Ø
    */
-  adjust = CodingSwitch(speedRightGet, THRESHOLDOFADJUST);
+  adjust = CodingSwitch(speedLeftGet, THRESHOLDOFADJUST);
   if(adjust){
     if(menuSwitch == 0){
       PIDServoOfGraph.proportion += adjust*VARIATION_GRAPH_PID;
@@ -473,7 +473,7 @@ void OLEDMenuOfElectromagnetismPID(){
 /***
 *±àÂë
 */
-  adjust = CodingSwitch(speedRightGet, THRESHOLDOFADJUST);
+  adjust = CodingSwitch(speedLeftGet, THRESHOLDOFADJUST);
   if(adjust){
     if(menuSwitch == 0){
       PIDServoOfElectromagnetism.proportion += adjust*VARIATION_Electromagnetism_PID;
