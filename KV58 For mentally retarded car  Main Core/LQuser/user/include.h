@@ -72,6 +72,7 @@ QQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQ*/
     #include "MicroSD.h"
     #include "fatfs.h"
     #include "CodingSwitch.h"
+    #include "PMU.h"
 
 
 

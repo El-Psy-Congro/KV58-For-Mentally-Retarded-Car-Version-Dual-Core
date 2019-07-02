@@ -69,21 +69,21 @@ void PIDInit(){
   PIDServoOfElectromagnetism.derivative = 0.20;
   PIDServoOfElectromagnetism.isDeviation = false;
 
-  PIDMotor.setPoint = 140;
+  PIDMotor.setPoint = 100;
   PIDMotor.proportion = 0.100;
-  PIDMotor.integral = 0.200;
+  PIDMotor.integral = 0.100;
   PIDMotor.derivative = 0;
   PIDMotor.isDeviation = true;
 
   PIDMotorLeft.setPoint = 140;
-  PIDMotorLeft.proportion = 0.200;
-  PIDMotorLeft.integral = 0.200;
+  PIDMotorLeft.proportion = 0.05;
+  PIDMotorLeft.integral = 0.100;
   PIDMotorLeft.derivative = 0;
   PIDMotorLeft.isDeviation = true;
 
   PIDMotorRight.setPoint = 140;
-  PIDMotorRight.proportion = 0.200;
-  PIDMotorRight.integral = 0.200;
+  PIDMotorRight.proportion = 0.050;
+  PIDMotorRight.integral = 0.100;
   PIDMotorRight.derivative = 0;
   PIDMotorRight.isDeviation = true;
 

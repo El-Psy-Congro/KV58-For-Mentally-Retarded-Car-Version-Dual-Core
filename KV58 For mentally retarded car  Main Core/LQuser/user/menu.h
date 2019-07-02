@@ -18,6 +18,7 @@ void OLEDMenuOfADCshow();
 void OLEDMenuOfADCMedia();
 void OLEDMenuOfSpeedMeasure();
 void OLEDMenuOfERECT();
+void OLEDMenuOfVoltage();
                                                         
 
 /****************TFT1.8²Ëµ¥Ò³ÏÔÊ¾º¯Êý**************/

@@ -62,12 +62,11 @@ void PIT0_IRQHandler(){
 // 用户添加所需代码
   PIT_Flag_Clear(PIT0);
   LED_Ctrl(LED0, RVS);        //中断发生后LED闪烁
-  speedLeftGet = FTM_AB_Get(FTM1);
-  speedRightGet = -FTM_AB_Get(FTM2);
+  speedLeftGet = FTM_AB_Get(FTM2);
+  speedRightGet = -FTM_AB_Get(FTM1);
   Motor_Duty(MotL, PIDPositional(speedLeftGet,  &PIDMotorLeft));
   Motor_Duty(MotR, PIDPositional(speedRightGet, &PIDMotorRight));
   Servo_Duty(servo);
-//  speed=FTM_AB_Get(FTM2);     //开启正交解码后，可以获取速度，正负表示方向
 }
 
 void PIT1_IRQHandler(){
