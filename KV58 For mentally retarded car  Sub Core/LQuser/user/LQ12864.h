@@ -13,7 +13,6 @@ QQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQ*/
 #ifndef _LQOLED_H
 #define _LQOLED_H
 #include "include.h"
-
 extern void LCD_Init(void);
 extern void LCD_CLS(void);
 extern void LCD_P6x8Str(unsigned char x,unsigned char y,unsigned char ch[]);

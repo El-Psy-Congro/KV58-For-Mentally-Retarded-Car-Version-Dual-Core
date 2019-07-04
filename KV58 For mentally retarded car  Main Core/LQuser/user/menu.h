@@ -8,6 +8,7 @@ void MenuPageAdd(void (*aPage)(void));
 
 /***************OLED²Ëµ¥Ò³º¯Êý*********************/
 void OLEDMenuOfCameraImage();
+void OLEDMenuOfCameraImageplus();
 void OLEDMenuOfGraphPID();
 void OLEDMenuOfElectromagnetismPID();
 void OLEDMenuOfMotorLeft();

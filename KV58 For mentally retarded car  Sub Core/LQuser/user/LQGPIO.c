@@ -153,7 +153,7 @@ void EXTI_Init(GPIO_Type * port, u8 n, exti_cfg cfg)
          p = PORTD_BASE_PTR;
          IRQ=PORTD_IRQn;
          break;
-     case 0x400FF100u:
+     case 0x400FF100u: 
          p = PORTE_BASE_PTR;
          IRQ=PORTE_IRQn;
          break;

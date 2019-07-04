@@ -16,11 +16,11 @@
 QQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQ*/
 
 #include "include.h"
-#define LCD_CS	PTE0_OUT
-#define LCD_DC	PTE19_OUT  
-#define LCD_RST	PTE20_OUT 
-#define LCD_SDA	PTE21_OUT  
-#define LCD_SCL	PTE29_OUT  
+#define LCD_CS	PTC12_OUT
+#define LCD_DC	PTC13_OUT  
+#define LCD_RST	PTC14_OUT 
+#define LCD_SDA	PTC15_OUT  
+#define LCD_SCL	PTC16_OUT  
 
 #define X_WIDTH 132
 #define Y_WIDTH 64
@@ -415,11 +415,11 @@ void LCD_CLS(void)
 void LCD_Init(void)        
 { 
   //-----端口初始化----//
-  GPIO_Init(GPIOE,29,GPO,1);
-  GPIO_Init(GPIOE,21,GPO,1);
-  GPIO_Init(GPIOE,20,GPO,1);
-  GPIO_Init(GPIOE,19,GPO,1);
-  GPIO_Init(GPIOE,0,GPO,1);
+  GPIO_Init(GPIOC,16,GPO,1);
+  GPIO_Init(GPIOC,15,GPO,1);
+  GPIO_Init(GPIOC,14,GPO,1);
+  GPIO_Init(GPIOC,13,GPO,1);  
+  GPIO_Init(GPIOC,12,GPO,0); 
   time_delay_ms(5);
   LCD_SCL=1;
   LCD_CS=0;	//预制SLK和SS为高电平               
@@ -457,7 +457,7 @@ void LCD_Init(void)
   LCD_WrCmd(0xaf);//--turn on oled panel
   LCD_Fill(0x00);  //初始清屏
   LCD_Set_Pos(0,0);  
-  monitorSelection = OLED;
+  
 } 
 //==============================================================
 //函数名： void LCD_PutPixel(unsigned char x,unsigned char y)
@@ -807,13 +807,13 @@ void Test_OLED(void)
     while (1)
     {  
       //测试按键      
-      if(KEY_Read(up)==0)
+      if(KEY_Read(KEY0)==0)
         LCD_P6x8Str(13,3,(uint8_t*)"KEY0 Pressed!   ");
       else LCD_P6x8Str(13,3,(uint8_t*)"KEY0 NO Pressed!");
-      if(KEY_Read(down)==0)
+      if(KEY_Read(KEY1)==0)
         LCD_P6x8Str(13,5,(uint8_t*)"KEY1 Pressed!   ");
       else LCD_P6x8Str(13,5,(uint8_t*)"KEY1 NO Pressed!");
-      if(KEY_Read(middle)==0)
+      if(KEY_Read(KEY2)==0)
         LCD_P6x8Str(13,7,(uint8_t*)"KEY2 Pressed!   ");
       else LCD_P6x8Str(13,7,(uint8_t*)"KEY2 NO Pressed!");
       

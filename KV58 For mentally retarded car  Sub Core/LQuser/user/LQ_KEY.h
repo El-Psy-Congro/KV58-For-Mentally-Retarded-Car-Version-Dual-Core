@@ -25,11 +25,9 @@ QQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQ*/
 //¶¨ÒåÄ£¿éºÅ
 typedef enum
 {
-    down=0,
-    left=1,
-    middle=2, 
-    right=3, 
-    up=4, 
+    KEY0=0,
+    KEY1=1,
+    KEY2=2,   
 } KEYn_e;
 typedef enum
 {
@@ -40,8 +38,7 @@ typedef enum
 
 extern void TestLED(void);
 extern void KEY_Init(void);
-//extern u8 KEY_Read(KEYn_e keyno);
-extern u8 KEYRead();
+extern u8 KEY_Read(KEYn_e keyno);
 extern void  Test_GPIO_KEY(void);
 extern void  Test_GPIO_EXINT(void);
 #endif 

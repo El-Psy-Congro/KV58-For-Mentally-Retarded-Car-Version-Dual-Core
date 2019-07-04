@@ -12,9 +12,8 @@ int coding;
  */
 int CodingSwitch(int channelSelection, u8 threshold){
   gear = 0;
-  if(!IsMotorVoltage()){
-    PIDMotorLeft.sumError = 0;
-    PIDMotorRight.sumError = 0;        //当电机电源开关关闭时 消除电机PID 积分累计
+  if(!IsMotorVoltage() && !GPIO_Get(PTB20)){
+
 
     coding = channelSelection;
     if(coding > 0){

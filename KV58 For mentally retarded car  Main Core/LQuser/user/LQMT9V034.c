@@ -114,8 +114,13 @@ void MT9V034_Init(void)
     {                      //摄像头识别失败，停止运行
       while(1){
         LCD_P6x8Str(0,0,"Camera Initialization Failed");
-        LCD_P6x8Str(0,2,"Please long press the middle key to unlock");
-
+        LCD_P6x8Str(0,2,"Please long press the key to unlock");
+        if(!KEYRead){
+          time_delay_ms(1700);
+          if(!KEYRead()){
+            break;
+          }
+        }
       }
     } 
     else                                                   //芯片ID正确
@@ -127,8 +132,13 @@ void MT9V034_Init(void)
   { 
     while(1){
       LCD_P6x8Str(0,0,"Camera Initialization Failed");
-      LCD_P6x8Str(0,2,"Please long press the middle key to unlock");
-
+      LCD_P6x8Str(0,2,"Please long press the key to unlock");
+      if(!KEYRead()){
+        time_delay_ms(1700);
+        if(!KEYRead()){
+          break;
+        }
+      }
     } //摄像头识别失败，停止运行
   }  
 
@@ -365,7 +375,8 @@ __ramfunc void GetUseImage(void)
       line++;        
     }      
     line = 0;
-    row++;      
+    row++;
+
   }  
 }
 
@@ -408,28 +419,53 @@ void Draw_Road(void)
   u8 i = 0, j = 0,temp=0;
   
   //发送帧头标志
-  for(i=8;i<56;i+=8)//6*8=48行 
+  for(i=8;i<56;i+=8)//6*8=48行
   {
     LCD_Set_Pos(18,i/8+1);//起始位置
     for(j=0;j<GRAPH_WIDTH;j++)  //列数
     { 
       temp=0;
-      if(graph[0+i][j]) temp|=1;
-      if(graph[1+i][j]) temp|=2;
-      if(graph[2+i][j]) temp|=4;
-      if(graph[3+i][j]) temp|=8;
-      if(graph[4+i][j]) temp|=0x10;
-      if(graph[5+i][j]) temp|=0x20;
-      if(graph[6+i][j]) temp|=0x40;
-      if(graph[7+i][j]) temp|=0x80;
+      if(graph[0+i-8][j]) temp|=1;
+      if(graph[1+i-8][j]) temp|=2;
+      if(graph[2+i-8][j]) temp|=4;
+      if(graph[3+i-8][j]) temp|=8;
+      if(graph[4+i-8][j]) temp|=0x10;
+      if(graph[5+i-8][j]) temp|=0x20;
+      if(graph[6+i-8][j]) temp|=0x40;
+      if(graph[7+i-8][j]) temp|=0x80;
       LCD_WrDat(temp); 	  	  	  	  
     }
   }  
 }
 
+//显示图像到OLED模块
+void DrawRoad(void)
+{
+  u8 i = 0, j = 0,temp=0;
+
+  //发送帧头标志
+  for(i=8;i<24;i+=8)//6*8=48行
+  {
+    LCD_Set_Pos(18,i/8+1);//起始位置
+    for(j=0;j<GRAPH_WIDTH;j++)  //列数
+    {
+      temp=0;
+      if(graph[0+i+46][j]) temp|=1;
+      if(graph[1+i+46][j]) temp|=2;
+      if(graph[2+i+46][j]) temp|=4;
+      if(graph[3+i+46][j]) temp|=8;
+      if(graph[4+i+46][j]) temp|=0x10;
+      if(graph[5+i+46][j]) temp|=0x20;
+      if(graph[6+i+46][j]) temp|=0x40;
+      if(graph[7+i+46][j]) temp|=0x80;
+      LCD_WrDat(temp);
+    }
+  }
+}
+
 
 //三面以上反数围绕清除噪点
-void Pixle_Filter(void)
+void GraphFilter(void)
 {  
   int nr; //行
   int nc; //列

@@ -11,6 +11,8 @@ uint16_t
 bool IsMotorVoltage(){
   voltageMotor = ADC0_Ave(ADC0_SE8,ADC_12bit,10)*22/52;
   if(voltageMotor<70){
+    PIDMotorLeft.sumError = 0;
+    PIDMotorRight.sumError = 0;        //当电机电源开关关闭时 消除电机PID 积分累计
     return false;
   }
   return true;

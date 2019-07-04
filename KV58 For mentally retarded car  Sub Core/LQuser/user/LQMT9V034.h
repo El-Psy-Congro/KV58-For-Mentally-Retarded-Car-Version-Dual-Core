@@ -21,18 +21,18 @@ QQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQ*/
 #define IMAGEH  120  //行 HEIGHT 待采集摄像头图像高度行数
 #define IMAGEW  188  //列 WIDTH  待采集摄像头图像宽度列数
 
-#define GRAPH_HIGHT    120  //OLED显示的行数
-#define GRAPH_WIDTH    94  //OLED显示的列数
+#define LCDH    60  //OLED显示的行数
+#define LCDW    94  //OLED显示的列数
 
-#define SCL_Out     DDRD11=1      //配置输出作为SCL_Out
-#define SDA_Out     DDRD10=1      //配置作为输出作为SDA_Out
-#define SDA_In      DDRD10=0      //配置作为输入作为SDA_In
+#define SCL_Out     DDRE1=1      //配置输出作为SCL_Out
+#define SDA_Out     DDRE0=1      //配置作为输出作为SDA_Out
+#define SDA_In      DDRE0=0      //配置作为输入作为SDA_In
 
-#define SCL_High    PTD11_OUT=1   //配置输出高电平
-#define SCL_Low     PTD11_OUT=0   //配置输出低电平
-#define SDA_High    PTD10_OUT=1   //配置输出高电平
-#define SDA_Low     PTD10_OUT=0   //配置输出低电平
-#define SDA_Data    PTD10_IN      //读取引脚上的引脚状态
+#define SCL_High    PTE1_OUT=1   //配置输出高电平
+#define SCL_Low     PTE1_OUT=0   //配置输出低电平
+#define SDA_High    PTE0_OUT=1   //配置输出高电平
+#define SDA_Low     PTE0_OUT=0   //配置输出低电平
+#define SDA_Data    PTE0_IN      //读取引脚上的引脚状态
 
 #define SLH       24 
 #define FLINE     25  
@@ -41,14 +41,7 @@ QQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQ*/
 #define MAX_ROW   60
 #define MAX_COL   94 
 
-extern uint8_t thresholdOfGraph;
-extern volatile u8  fieldOverFlag;
-extern u8 imageData[IMAGEH][IMAGEW];
-extern u16 graph[GRAPH_HIGHT][GRAPH_WIDTH];
-extern volatile u8 Image_Use[GRAPH_HIGHT][GRAPH_WIDTH];
-
 void SendPicture(void);
-
 void SCCB_Init(void);
 void SCCB_Wait(void);
 void SCCB_Stop(void);
@@ -63,7 +56,6 @@ extern void MT9V034_SetReservedReg(void);
 extern void MT9V034_SetFrameRate(uint8_t frameRate);
 extern void MT9V034_SetFrameResolution(uint16_t height,uint16_t width);
 extern void MT9V034_SetAutoExposure(bool enable);
-void GetUseImage(void);
 
 void UARTSendPicture(uint8_t tmImage[IMAGEH][IMAGEW]) ;
 uint8_t GetOSTU(uint8_t tmImage[IMAGEH][IMAGEW]) ;
@@ -74,12 +66,12 @@ void Cam_Init(void);
 void Get_Pixel(void);
 void Get_Back(void);
 void Draw_Road(void);
-void GetUseImage(void);
-void GetBinarizationValue(void);
+void Get_Use_Image(void);
+void Get_01_Value(void);
 void Pixle_Filter(void);
-void SeekRoad(void);
+void Seek_Road(void);
 void FindTiXing(void);
-int MT9V034(void);
+void Test_LQV034(void);
 void UARTSendPicture2(uint8_t tmImage[IMAGEH][IMAGEW]) ;
 void UARTSendPicture(uint8_t tmImage[IMAGEH][IMAGEW]) ;
 

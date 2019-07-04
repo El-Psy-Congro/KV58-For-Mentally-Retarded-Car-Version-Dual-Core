@@ -8,6 +8,7 @@ void MenuPageAdd(void (*aPage)(void));
 
 /***************OLED菜单页函数*********************/
 void OLEDMenuOfCameraImage();
+void OLEDMenuOfCameraImageplus();
 void OLEDMenuOfGraphPID();
 void OLEDMenuOfElectromagnetismPID();
 void OLEDMenuOfMotorLeft();
@@ -18,7 +19,8 @@ void OLEDMenuOfADCshow();
 void OLEDMenuOfADCMedia();
 void OLEDMenuOfSpeedMeasure();
 void OLEDMenuOfERECT();
-
+void OLEDMenuOfVoltage();
+                                                        
 
 /****************TFT1.8菜单页显示函数**************/
 void TFTMenuOfMT9V034();

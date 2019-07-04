@@ -66,7 +66,7 @@ void PIT0_IRQHandler(){
   speedRightGet = -FTM_AB_Get(FTM1);
   Motor_Duty(MotL, PIDPositional(speedLeftGet,  &PIDMotorLeft));
   Motor_Duty(MotR, PIDPositional(speedRightGet, &PIDMotorRight));
-  Servo_Duty(servo);
+  Servo_Duty(LimitingAmplitudeVersionReturn(servo, 4700, 5900));
 }
 
 void PIT1_IRQHandler(){
@@ -81,10 +81,7 @@ void PIT2_IRQHandler(){
   PIT_Flag_Clear(PIT2);       //清中断标志位
 //  LED_Ctrl(LED3, RVS);
 //  GyroAngleProcessing();
-  isIslandLeft = false;
-  isIslandRight = false;
-  BEE_OFF;
-
+  Ultrasonic();
 
   /*用户添加所需代码*/
 }

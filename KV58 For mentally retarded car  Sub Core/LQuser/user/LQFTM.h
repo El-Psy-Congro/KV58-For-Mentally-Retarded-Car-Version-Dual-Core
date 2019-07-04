@@ -18,12 +18,10 @@ QQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQ*/
 #define _FTM_H_
 
 //¶¨Òåµ±Ç°ËùÓÃ¶æ»úµÄ²ÎÊı
-#define     Servo_Left        740 //×ó×ª¼«ÏŞ£¬Ã¿¸ö¶æ»úÊıÖµ²»Í¬
-#define     Servo_Middle      620 //ÖĞĞÄÎ»ÖÃ£¬Ã¿¸ö¶æ»úÊıÖµ²»Í¬
-#define     Servo_Right       500 //ÓÒ×ª¼«ÏŞ£¬Ã¿¸ö¶æ»úÊıÖµ²»Í¬
+#define     Servo_Left        3300 //×ó×ª¼«ÏŞ£¬Ã¿¸ö¶æ»úÊıÖµ²»Í¬
+#define     Servo_Middle      4200 //ÖĞĞÄÎ»ÖÃ£¬Ã¿¸ö¶æ»úÊıÖµ²»Í¬
+#define     Servo_Right       5100 //ÓÒ×ª¼«ÏŞ£¬Ã¿¸ö¶æ»úÊıÖµ²»Í¬
 
-#define MOTORMAX 800
-#define MOTORMIN -800
 /**********************************  FTM(Òı½Å¸´ÓÃ)ÒÑÈ·ÈÏ20171218*************************/
 
 //      Ä£¿éÍ¨µÀ    ¶Ë¿Ú          ¿ÉÑ¡·¶Î§              ½¨Òé
@@ -70,8 +68,6 @@ typedef enum
     Mot3,
     Mot4,
     Mot5,
-    MotL,
-    MotR,
 }Mot_CHn_e;
 
 //¶¨ÒåFTM Í¨µÀºÅ
@@ -114,7 +110,7 @@ s16  FTM_AB_Get(FTM_Type * ftmn);          //»ñÈ¡FTM Õı½»½âÂë µÄÂö³åÊı(¸ºÊı±íÊ¾·
 
 void Motor_Init(void);
 void Servo_Init(void);
-extern void Motor_Duty(u16 Motno, int duty);
+extern void Motor_Duty(u16 Motno, u32 duty);
 extern void Servo_Duty(u32 duty);
 
 extern void Test_Servo(void);//¶æ»ú²âÊÔ

@@ -12,6 +12,7 @@ typedef struct{
     bool  isDeviation;              //返回值是否加上设定值     1为不加，   2为加上设定值
 } PID;
 
+
 typedef struct{
   float proportion;
   float  integral;

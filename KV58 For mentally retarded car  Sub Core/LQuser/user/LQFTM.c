@@ -762,7 +762,7 @@ void ServoFTM_PWM_Init(FTM_Type * ftmn, FTM_CHn_e ch, u16 mod, u16 cv)
 
     /******************** ÅäÖÃÊ±ÖÓºÍ·ÖÆµ ********************/
     FTM_SC_REG(ftmn)    = ( 0
-                                  | FTM_SC_PS(5)      //·ÖÆµ2^FTM_SC_PS,ÆµÂÊÎª 275M/2/2^7
+                                  | FTM_SC_PS(7)      //·ÖÆµ2^FTM_SC_PS,ÆµÂÊÎª 275M/2/2^7
                                   | FTM_SC_CLKS(1)    //Ê±ÖÓÑ¡Ôñ£¬busÊ±ÖÓ
                           );                          //PMWÆµÂÊ=XÏµÍ³ÆµÂÊ/2/(2^FTM1_SC_PS)/FTM1_MOD
     FTM_MOD_REG(ftmn)   = mod;                        //Ä£Êý, EPWMµÄÖÜÆÚÎª £ºMOD - CNTIN + 0x0001
@@ -1509,17 +1509,17 @@ void FTM3_interrupt(void)
 void Motor_Init(void)
 {
    //µç»úÆµÂÊ£º275M/2/(2^4)/1000=8.5kHZ,
-   FTM_PWM_Init(FTM0,FTM_CH0,1000,  0);//Mot0-PTC1
-   FTM_PWM_Init(FTM0,FTM_CH1,1000,  0);//Mot1-PTC2
-   FTM_PWM_Init(FTM0,FTM_CH2,1000,  0);//Mot2-PTC3
-   FTM_PWM_Init(FTM0,FTM_CH3,1000,  0);//Mot3-PTC4
+   FTM_PWM_Init(FTM0,FTM_CH0,1000,  500);//Mot0-PTC1
+   FTM_PWM_Init(FTM0,FTM_CH1,1000,  500);//Mot1-PTC2 
+   FTM_PWM_Init(FTM0,FTM_CH2,1000,  500);//Mot2-PTC3
+   FTM_PWM_Init(FTM0,FTM_CH3,1000,  500);//Mot3-PTC4 
 }
 void Servo_Init(void)
 {
    //¶æ»úÆµÂÊ£º275M/2/(2^7)/21484.375=50HZ,FTM3Ó²¼þ±¨´í
    //¶æ»úÆµÂÊ£º275M/2/(2^7)/20000=54HZ,FTM3Ó²¼þ±¨´í
-   ServoFTM_PWM_Init(FTM3,FTM_CH7,40000,Servo_Middle);//Mot11-PTC11    ¶æ»ú·½Ïò×ó±ß´óÓÒ±ßÐ¡
-   ServoFTM_PWM_Init(FTM3,FTM_CH6,40000,Servo_Middle);
+   ServoFTM_PWM_Init(FTM3,FTM_CH7,20000,Servo_Middle);//Mot11-PTC11    ¶æ»ú·½Ïò×ó±ß´óÓÒ±ßÐ¡
+   ServoFTM_PWM_Init(FTM3,FTM_CH6,20000,Servo_Middle);
 }
 /*LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL
 ¡¾×÷  Õß¡¿CHIUSIR
@@ -1534,32 +1534,28 @@ u32 duty,  0--500--1000,Í¨¹ýÁ½Â·PWM¿ØÖÆ°ëÇÅµÄÊä³öµçÑ¹£¬Á½¸öÑ¹²îÇý¶¯Ö±Á÷µç»úÕý·´×
 CT_PWM_Duty(CT1_CH0, duty);0--15000
 ÓÃ»§Ò²¿ÉÒÔ×Ô¼ºÐÞ¸Ä±ÈÀýÏµÊý£¬ÒÔ·½±ã×Ô¼ºÊ¹ÓÃ£¬Ä¬ÈÏÎª15
 QQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQ*/ 
-void Motor_Duty(u16 Motno, int duty){
-  if(duty < MOTORMAX && duty > MOTORMIN){
-    switch(Motno){
-    case MotR:
-      if(duty > 0){
-        FTM_CnV_REG(FTM0, FTM_CH0) = 0;  //µç»ú
-        FTM_CnV_REG(FTM0, FTM_CH1) = duty;
-      }else{
-        FTM_CnV_REG(FTM0, FTM_CH1) = 0;  //µç»ú
-        FTM_CnV_REG(FTM0, FTM_CH0) = -duty;  //µç»ú
-      }
-      break;
-
-    case MotL:
-      if(duty > 0){
-        FTM_CnV_REG(FTM0, FTM_CH2) = duty;  //µç»ú
-        FTM_CnV_REG(FTM0, FTM_CH3) = 0;  //µç»ú
-      }else{
-        FTM_CnV_REG(FTM0, FTM_CH3) = -duty;  //µç»ú
-        FTM_CnV_REG(FTM0, FTM_CH2) = 0;  //µç»ú
-      }
-      break;
-
+void Motor_Duty(u16 Motno, u32 duty)
+{    
+  //¹éÒ»»¯Îª0--500--1000
+  //if(duty<1001)
+  {   
+    switch(Motno) 
+    {
+    case Mot0:      
+      FTM_CnV_REG(FTM0, FTM_CH0) = duty;   //µç»ú£¬
+      break;      
+    case Mot1:
+      FTM_CnV_REG(FTM0, FTM_CH1) = duty;   //µç»ú£¬
+      break;      
+    case Mot2:
+      FTM_CnV_REG(FTM0, FTM_CH2) = duty;   //µç»ú£¬    
+      break;      
+    case Mot3:
+      FTM_CnV_REG(FTM0, FTM_CH3) = duty;  //µç»ú£¬
+      break;             
     default:
-      break;
-    }
+      break; 
+    }  
   }
 }
 
@@ -1605,26 +1601,26 @@ void Test_Servo(void)
 #else    
   KEY_Init();          //°´¼ü¼°ÊäÈë¿Ú³õÊ¼»¯
   LCD_CLS();           //LCDÇåÆÁ    
-  
+  Servo_Init();        //µç»úÆµÂÊÉèÖÃ
   LCD_P8x16Str(13,0,(uint8_t*)"LQ Servo PWM");
 #endif    
   
   while (1)
   {    
     
-    if(!KEY_Read(down))  
+    if(!KEY_Read(KEY0))  
     {
       //if(servopwm>Servo_Left-9) 
         servopwm-=10;
       Servo_Duty(servopwm);//Ë¢ÐÂservopwmÆµÂÊ
     }
-    else if(!KEY_Read(up))  
+    else if(!KEY_Read(KEY2))  
     {
       //if(servopwm<Servo_Right-9) 
         servopwm+=10;
       Servo_Duty(servopwm);//Ë¢ÐÂservopwmÆµÂÊ
     }
-    else if(!KEY_Read(middle))  
+    else if(!KEY_Read(KEY1))  
     {
       servopwm=Servo_Middle;
       Servo_Duty(servopwm);//Ë¢ÐÂservopwmÆµÂÊ
@@ -1673,19 +1669,19 @@ void Test_Motor(void)
   
   while (1)
   {        
-    if(!KEY_Read(down))  
+    if(!KEY_Read(KEY0))  
     {
       //if(motorpwm>99) 
         motorpwm-=10;
       Motor_Duty(Mot1,motorpwm);//Ë¢ÐÂservopwmÆµÂÊ
     }
-    else if(!KEY_Read(up))  
+    else if(!KEY_Read(KEY2))  
     {
       //if(motorpwm<12000) 
         motorpwm+=10;
       Motor_Duty(Mot1,motorpwm);//Ë¢ÐÂservopwmÆµÂÊ
     }
-    else if(!KEY_Read(middle))  
+    else if(!KEY_Read(KEY1))  
     {
       motorpwm=500;
       Motor_Duty(Mot1,motorpwm);//Ë¢ÐÂservopwmÆµÂÊ
@@ -1732,7 +1728,8 @@ void Test_AB_Pulse_Cnt(void)
 #endif
   
   
-
+  while (1)
+  {    
     counterVal =FTM_AB_Get(FTM1);     //»ñÈ¡Õý½»½âÂëËÙ¶È£¬Õý¸º±íÊ¾·½Ïò;     
     sprintf(txt,"QAB1: %05d \n",counterVal);
 #ifdef __USE_TFT18
@@ -1753,5 +1750,5 @@ void Test_AB_Pulse_Cnt(void)
     //LEDÉÁË¸
     LED_Ctrl(LED1, RVS);    
     time_delay_ms(200);         
-
+  }
 }

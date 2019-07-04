@@ -21,7 +21,6 @@ QQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQ*/
 #define PIT_Flag_Clear(PITn)   PIT_TFLG(PITn)|=PIT_TFLG_TIF_MASK      //清中断标志
 
 
-
 //模块定义
 typedef enum PITn
 {
@@ -30,8 +29,6 @@ typedef enum PITn
     PIT2,
     PIT3
 } PITn;
-
-extern int speedLeftGet, speedRightGet;
 
 /*********************** PIT功能函数 **************************/
 void PIT_Init(PITn, u32 cnt);                                            //初始化PITn，并设置定时时间(单位为bus时钟周期)

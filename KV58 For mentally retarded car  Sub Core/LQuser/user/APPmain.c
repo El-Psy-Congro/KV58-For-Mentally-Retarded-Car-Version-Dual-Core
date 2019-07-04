@@ -85,11 +85,17 @@ DIR/B           PTB19
 OLED模块        单片机接口  核心板用的是PTC16-19
 VCC             3.3V        用户自行修改初始化和管脚定义
 GND             GND
-RST             PTC13
-DC              PTC14
-SDA             PTC15
-CLK             PTC16
-CS              PTC12
+OLED接口定义：
+CLK --PTC16
+SDA --PTC15
+RST --PTC14
+DC  --PTC13
+TFT1.8接口定义：
+RST --PTC12
+DC  --PTC13
+SDA --PTC14
+CLK --PTC15
+CS  --PTC16
 -------------------------------------------------------------
 蓝牙/USBTTL     单片机接口   
 GND             GND
@@ -112,6 +118,7 @@ KEY2            PTB22   //可中断触发
 修改历史：
 20180208-中断处理函数在startup_MKV58F24.s中，名字必须对应才能触发中断；
 20180327-已经修改神眼摄像头的采集模式为DMA，分辨率为188*120，100db HDR；
+20181120-修改九轴，6050的IIC通信问题，完善九轴测试。添加模拟IIC，可直接修改IIC使用引脚。
 ********************************************************************************/
 #include "include.h"
 
@@ -137,107 +144,69 @@ KEY2            PTB22   //可中断触发
 
 void main(void)
 {   
-  PLL_Init(PLL235);             //设置内核及总线频率等
-  KEY_Init();                   //按键及输入口初始化
-  LED_Init();                   //LED初始化
-  LCD_Init();                   //LCD初始化
-//  TFTSPI_Init();                //TFT1.8吋SPI彩屏初始化
-  UART_Init(UART_0,115200);     //串口初始化
-  MT9V034_Init();               //摄像头初始化
-  Servo_Init();                 //舵机初始化
-  Motor_Init();                 //电机初始化
-  PIDInit();
-//  Init_LQ_9AX();
-  ButterworthParameterInit();   //巴特沃斯低通滤波初始化
-  FTM_AB_Init(FTM1);            //编码器初始化
-  FTM_AB_Init(FTM2);            //编码器初始化
-  MenuInit();                   //菜单初始化
-  ADC0_Init();                  //ADC初始化
+  PLL_Init(PLL250);         //设置内核及总线频率等
+//  KEY_Init();               //按键及输入口初始化  
+  LED_Init();               //LED初始化
+  UART_Init(UART_5,115200); //串口初始化
+  TFTSPI_Init();             //LCD初始化
+  OV7725_Init();             //摄像头初始化
+  PIT_Init(PIT0, 30);
+  PIT_Init(PIT1, 100);
 
-
-  PIT_Init(PIT0, 10);           //定时器0初始化       舵机与电机的控制
-  PIT_Init(PIT1, 30);           //定时器1初始化       数据的处理
-//  PIT_Init(PIT2, 1000);            //定时器2初始化     陀螺仪数据的处理
-  PIT_Init(PIT3, 100);          //定时器2初始化     菜单的显示
-//  GyroInit();
-
-
-
-
-
-
-  LCD_CLS();                    //清屏
-//  LCD_Show_LQLogo();          //显示龙邱LOGO
-  LCD_P14x16Str(0,0,"16");      //字符串显示
   
-
- 
-//  time_delay_ms(500);           //延时
-  
-  
-//#ifdef __USE_TFT18
-//  TFTSPI_CLS(u16BLACK);       //蓝色屏幕
-//#else    
-//  LCD_CLS();                 //清屏
-//#endif  
-  Servo_Duty(servoMedian);
+  TFTSPI_CLS(u16BLACK);
+  EnableInterrupts
+  LED_Ctrl(LEDALL, OFF);   
   BEE_OFF;
-  time_delay_ms(100);        //延时
-  EnableInterrupts          //中断使能
-  LED_Ctrl(LEDALL, OFF);
-//  -----------------------------------------------------------------------------------------
-//    测试函数都是死循环，每次只能开启一个
-//  -----------------------------------------------------------------------------------------
-//  Test_ADC0();         //测试ADC采集功能               电磁传感器及电源电压监控
-//  Test_UART();         //测试UART及中断                蓝牙、USB转TTL调试及通信
-//  Test_LED();          //测试GPIO输出口                LED显示及外设控制
-//  Test_OLED();         //O测试模拟SPI功能              OLED模块功能
-//  Test_GPIO_KEY();     //测试GPIO输入                  按键检测功能
-//  Test_GPIO_EXINT();   //测试GPIO输入及外部中断        按键、中断检测功能
-//  Test_Servo();        //数字舵机测试
-//  Test_Motor();        //直流电机驱动测试，            用龙邱全桥驱动板
-//  Test_9AX();          //测试I2C及龙邱九轴
-//  Test_MPU6050();      //测试I2C及6轴陀螺仪功能
-//  Test_LQV034();       //OLED显示屏及面阵摄像头动图
-//  Test_PIT();          //测试PIT定时中断功能
-//  Test_AB_Pulse_Cnt(); //测试编码器正交解码功能
-//  Test_LPTMR_delay();  //测试LPTMR延时功能
-//  Test_LPTMR_Counter();//测试LPTMR计数功能
-//  Test_DMA_Counter();  //测试DMA计数功能
-//  TFTSPI_Test();       //测试龙邱TFT1.8吋SPI彩屏
-//  Test_OLED();
-//  -----------------------------------------------------------------------------------------
-//  LCD_Show_LQLogo();
-
-
-  while(1){
-//    BEE_OFF;
-
-//    VirtualOscilloscope(VirtualOscilloscopeData);
-//    GyroAngleProcessing();
-//    Servo_Duty(servoMedian);
-//    Menu();
-
-//    ReadGyro();
-    
-//    GetUseImage();
-//    LED_Ctrl(LED2, RVS);
-//    GraphProcessingOfCannyEdgeDetection();
-//    UART_Put_Char(UART_4, 0x00);
-//    UART_Put_Char(UART_4, 0xFF);
-//    UART_Put_Char(UART_4, 0x01);
-//    UART_Put_Char(UART_4, 0x00);
-//    for(int i = 0; i < GRAPH_HIGHT - 1; i++){
-//      for(int j = 0; j < GRAPH_WIDTH - 1; j++){
-//        UART_Put_Char(UART_4, Image_Use[i][j]);
-//      }
-//    }
-
-
-    
-  }
+  //-----------------------------------------------------------------------------------------  
+  //  测试函数都是死循环，每次只能开启一个
+  //-----------------------------------------------------------------------------------------
+  //Test_ADC0();         //测试ADC采集功能               电磁传感器及电源电压监控 
+  //Test_UART();         //测试UART及中断                蓝牙、USB转TTL调试及通信
+  // Test_LED();         //测试GPIO输出口                LED显示及外设控制        
+  //Test_OLED();         //O测试模拟SPI功能              OLED模块功能   
+  //Test_GPIO_KEY();     //测试GPIO输入                  按键检测功能              
+  //Test_GPIO_EXINT();   //测试GPIO输入及外部中断        按键、中断检测功能  
+  //Test_Servo();        //数字舵机测试
+  //Test_Motor();        //直流电机驱动测试，            用龙邱全桥驱动板
+  //Test_9AX();          //测试I2C及龙邱九轴
+  //Test_MPU6050();      //测试I2C及6轴陀螺仪功能
+ // Test_OV7725();         //TFT1.8寸彩色显示屏显示彩色图像  //已完成
+  //Test_PIT();          //测试PIT定时中断功能 
+  //Test_AB_Pulse_Cnt(); //测试编码器正交解码功能
+  //Test_LPTMR_delay();  //测试LPTMR延时功能                
+  //Test_LPTMR_Counter();//测试LPTMR计数功能   
+  //Test_DMA_Counter();  //测试DMA计数功能   
+  //TFTSPI_Test();          //测试龙邱TFT1.8吋SPI彩屏
+  //Test_OLED();  
+  //-----------------------------------------------------------------------------------------
+  //LCD_Show_LQLogo();
+  while(1)
+    {   
+      if(Field_Over_Flag)    //完成一场图像采集后显示并发送数据到上位机
+    {
+      //串口发送数据非常慢，注释掉OLED刷新很快
+      //UARTSendPicture(Image_Data);     //发送数据到上位机，注意协议格式，不同的上位机看原函数对应修改
+//      UARTSendPicture2(Image_Data);
+        TFTSPI_Show_Pic3(20, 27, 125, 75, Image_Data);
+//      Get_Use_Image();     //采集图像数据存放数组
+//      Get_01_Value();      //二值化图像数据
+//                  
+//      Threshold = GetOSTU(Image_Data);   //OSTU大津法 获取全局阈值
+//      BinaryImage(Image_Data,Threshold); //二值化图像数据
+//      
+//      Draw_Road();         //龙邱OLED模块显示动态图像
+      Field_Over_Flag= 0;       
+    }
+     // TFTSPI_P8X8NUM(uint8_t x, uint8_t y, uint16_t num, uint8_t num_bit,uint16_t word_color,uint16_t back_color)
+     /* LED_Ctrl(LED0, RVS);//反转   
+      LED_Ctrl(LED1, RVS);//反转 
+      LED_Ctrl(LED2, RVS);//反转 
+      LED_Ctrl(LED3, RVS);//反转 
+      time_delay_ms(500); //延时  */         
+    }
 } 
 
-/*********************************************************************************
+/*******************************************************************************
 * EOF
 ******************************************************************************/

@@ -46,7 +46,8 @@ QQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQ*/
     #include "LQGPIO.h"
     #include "LQ_LED.h"
     #include "LQ_KEY.h"
-    #include "LQMT9V034.h"
+//    #include "LQMT9V034.h"
+    #include "LQOV7725.h"
     #include "LQ_SGP18T.h"   
     #include "LQ12864.h"
     #include "LQI2C.h"
@@ -58,24 +59,8 @@ QQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQ*/
     #include "LPTMR.h"   
     #include "LQMPU6050.h"
     #include "LQ9AX.h"
-    #include "LQ_VL53.h"
+    #include "u_iic.h"
 
 
 
-    #include "PID.h"
-    #include "menu.h"
-    #include "simulationIIC.h"
-    #include "L3G4200D.h"
-    #include "processing.h"
-    #include "filter.h"
-    #include "mathematics.h"
-    #include "MicroSD.h"
-    #include "fatfs.h"
-    #include "CodingSwitch.h"
-
-
-
-
-
-
-#endif
+#endif 

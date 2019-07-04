@@ -222,5 +222,7 @@ extern void DMA_Count_Init(DMA_CHn CHn, PTXn_e ptxn, u32 count, DMA_PORTx2BUFF_c
 extern u32  DMA_Count_Get(DMA_CHn CHn);
 extern void DMA_Count_Reset(DMA_CHn CHn);
 extern void Test_DMA_Counter(void);
-
+extern void DMATransDataStart(uint8_t CHn,uint32_t address) ;
+extern void DMATransDataStart2(uint8_t CHn,uint32_t address,uint32_t Val);
+extern void DMATransDataInit(DMA_CHn CHn,void *SADDR, void *DADDR,PTXn_e ptxn,DMA_BYTEn byten,u32 count,DMA_Count_cfg cfg);
 #endif  //_DMA_H_

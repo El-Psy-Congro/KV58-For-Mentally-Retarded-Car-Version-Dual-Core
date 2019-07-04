@@ -29,9 +29,9 @@ QQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQ*/
 void LED_Init(void)
 {  
   //-----端口初始化----//
-  GPIO_Init(GPIOD,15,GPO,1);
-  GPIO_Init(GPIOC,16,GPO,1);
-
+  GPIO_Init(GPIOD,1,GPO,0);
+  GPIO_Init(GPIOC,4,GPO,0);
+  GPIO_Init(GPIOD,7,GPO,0);
 }
 /*LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL
 【作  者】CHIUSIR
@@ -49,31 +49,42 @@ void LED_Ctrl(LEDn_e ledno, LEDs_e sta)
   switch(ledno) 
   {
   case LED0:
-    if(sta==ON)       PTD15_OUT=0; //Turn on target LED1
-    else if(sta==OFF) PTD15_OUT=1; //Turn off target LED1
-    else if(sta==RVS) GPIO_Reverse (GPIOD, 15);//Toggle on target LED1
+    if(sta==ON)        PTD1_OUT=0; //Turn on target LED1 
+    else if(sta==OFF) PTD1_OUT=1; //Turn off target LED1 
+    else if(sta==RVS) GPIO_Reverse (GPIOD, 1);//Toggle on target LED1
     break;
   case LED1:
-    if(sta==ON)       PTC16_OUT=0; //Turn on target LED3
-    else if(sta==OFF) PTC16_OUT=1; //Turn off target LED3
-    else if(sta==RVS) GPIO_Reverse (GPIOC, 16);//Toggle on target LED3
+    if(sta==ON)        PTC4_OUT=0; //Turn on target LED3 
+    else if(sta==OFF) PTC4_OUT=1; //Turn off target LED3 
+    else if(sta==RVS) GPIO_Reverse (GPIOC, 4);//Toggle on target LED3
     break;   
+  case LED3:
+    if(sta==ON)        PTA17_OUT=0; //Turn on target LED2 
+    else if(sta==OFF) PTA17_OUT=1; //Turn off target LED2 
+    else if(sta==RVS) GPIO_Reverse (GPIOA, 17);//Toggle on target LED2
+    break;    
+  case LED2:
+    if(sta==ON)        PTE29_OUT=0; //Turn on target LED3 
+    else if(sta==OFF) PTE29_OUT=1; //Turn off target LED3 
+    else if(sta==RVS) GPIO_Reverse (GPIOE, 29);//Toggle on target LED3
+    break; 
   case LEDALL:
     if(sta==ON) 
     {       
-      PTD15_OUT=0;
-      PTC16_OUT=0; //Turn on target LED1
+      PTD1_OUT=0;
+      PTC4_OUT=0; //Turn on target LED1 
 
     }
     else if(sta==OFF)
     { 
-      PTB15_OUT=1;
-      PTB16_OUT=1;   //Turn off target LED1
+      PTD1_OUT=1;
+      PTC4_OUT=1;   //Turn off target LED1 
+
     }
     else if(sta==RVS)
     {       
-      GPIO_Reverse (GPIOD, 15); //Toggle on target LED1
-      GPIO_Reverse (GPIOC, 16); //Toggle on target LED2
+      GPIO_Reverse (GPIOC, 4);  //Toggle on target LED3
+      GPIO_Reverse (GPIOD, 1);
     }
     break;
   default:

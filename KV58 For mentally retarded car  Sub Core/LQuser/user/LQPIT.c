@@ -15,7 +15,7 @@
 【pllclock】275.000MHz
 QQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQ*/
 #include "include.h"
-
+ 
 //-------------------------------------------------------------------------*
 //函数名: pit_init
 //功  能: 初始化PIT
@@ -55,61 +55,47 @@ void PIT_Init(PITn pitn, u32 cnt)
 //返  回: 无
 //简  例: 由初始化决定，多长时间进入一次
 //-------------------------------------------------------------------------*
-//short speed=0;
-int speedLeftGet, speedRightGet;
+short speed=0;
 
-void PIT0_IRQHandler(){
-// 用户添加所需代码
-  PIT_Flag_Clear(PIT0);
-  LED_Ctrl(LED0, RVS);        //中断发生后LED闪烁
-  speedLeftGet = FTM_AB_Get(FTM1);
-  speedRightGet = -FTM_AB_Get(FTM2);
-  Motor_Duty(MotL, PIDPositional(speedLeftGet,  &PIDMotorLeft));
-  Motor_Duty(MotR, PIDPositional(speedRightGet, &PIDMotorRight));
-  Servo_Duty(servo);
-//  speed=FTM_AB_Get(FTM2);     //开启正交解码后，可以获取速度，正负表示方向
+void PIT0_IRQHandler()
+{
+  PIT_Flag_Clear(PIT0);       //清中断标志位
+ //用户添加所需代码
+  LED_Ctrl(LED2, RVS);        //中断发生后LED闪烁
+  //speed=FTM_AB_Get(FTM2);     //开启正交解码后，可以获取速度，正负表示方向
 }
 
-void PIT1_IRQHandler(){
+void PIT1_IRQHandler()
+{
   PIT_Flag_Clear(PIT1);       //清中断标志位
-  LED_Ctrl(LED4, RVS);        //中断发生后LED闪烁
-  /*用户添加所需代码*/
-  DataFusion();
-
+ /*用户添加所需代码*/
 }
 
-void PIT2_IRQHandler(){
-  PIT_Flag_Clear(PIT2);       //清中断标志位
-//  LED_Ctrl(LED3, RVS);
-//  GyroAngleProcessing();
-  isIslandLeft = false;
-  isIslandRight = false;
-  BEE_OFF;
-
-
+void PIT2_IRQHandler()
+{
+  PIT_Flag_Clear(PIT1);       //清中断标志位
   /*用户添加所需代码*/
 }
 
 void PIT3_IRQHandler()
 {
   PIT_Flag_Clear(PIT3);       //清中断标志位
-  Menu();
   /*用户添加所需代码*/
 }
 
-// test function
+// test function 
 void Test_PIT(void)
-{
+{    
     //UART串口演示
-    UART_Init(UART_4,115200);
-    UART_Put_Str(UART_4,"LongQiu UART4 ADC\n");
+    UART_Init(UART_4,115200);    
+    UART_Put_Str(UART_4,"LongQiu UART4 ADC\n"); 
     PIT_Init(PIT0, 200);          //PIT定时中断初始化
-
+    
     while (1)
-    {
+    {       
       //LED闪烁
       LED_Ctrl(LED1, RVS);
-      UART_Put_Str(UART_4,"LongQiu PIT0 INTERRUPT!\n");
+      UART_Put_Str(UART_4,"LongQiu PIT0 INTERRUPT!\n"); 
       //systick中断延时
       time_delay_ms(500);
     }

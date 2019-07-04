@@ -7,7 +7,7 @@
 #define NUMBER_OF_ERECT 4
 #define NUMBER_OF_ADC 8
 #define NUMBER_OF_GRAPH_SPREAD 2
-#define VARIATION_SPEED_PID 0.001
+#define VARIATION_SPEED_PID 0.1
 #define VARIATION_GRAPH_PID 0.1
 #define VARIATION_Electromagnetism_PID 0.01
 #define VARIATION_ERECT_PID 0.001
@@ -17,6 +17,7 @@
 
 #define THRESHOLDOFPAGE 10
 #define THRESHOLDOFADJUST 7
+
 
 /*
  * 菜单切换变量
@@ -48,13 +49,15 @@ char txt[16];
 void MenuInit(){
   if(monitorSelection == OLED){
     //OLED的菜单页放这里
-    MenuPageAdd(OLEDMenuOfMotor);
     MenuPageAdd(OLEDMenuOfCameraImage);
+    MenuPageAdd(OLEDMenuOfCameraImageplus);
+    MenuPageAdd(OLEDMenuOfMotor);
+
     MenuPageAdd(OLEDMenuOfGraphPID);
     MenuPageAdd(OLEDMenuOfElectromagnetismPID);
 
-    MenuPageAdd(OLEDMenuOfMotorLeft);
-    MenuPageAdd(OLEDMenuOfMotorRight);
+//    MenuPageAdd(OLEDMenuOfMotorLeft);
+//    MenuPageAdd(OLEDMenuOfMotorRight);
 //    MenuPageAdd(OLEDMenuOfERECT);
     MenuPageAdd(OLEDMenuOfVoltage);
     MenuPageAdd(OLEDMenuOfADCshow);
@@ -136,6 +139,13 @@ void OLEDMenuOfCameraImage(){
   LCD_Show_Frame100();
   Draw_Road();
   LCD_P8x16Str(0,0,"Graph");
+  sprintf(txt,"%03d",thresholdOfGraph);
+  LCD_P6x8Str(100,1,(u8*)txt);
+}
+void OLEDMenuOfCameraImageplus(){
+  LCD_Show_Frame100();
+  DrawRoad();
+  LCD_P8x16Str(0,0,"GraphAdd");
   sprintf(txt,"%03d",thresholdOfGraph);
   LCD_P6x8Str(100,1,(u8*)txt);
 }

@@ -23,9 +23,9 @@
 
 if ($debugfile -eq "")
 {
-& "D:\Program Files (x86)\IAR Systems\Embedded Workbench 8.0\common\bin\cspybat" -f "D:\Project\Mentally retarded car\KV58 For mentally retarded car\KV58 For mentally retarded car Version Dual Core\settings\demoLQ_KV58F24.Release.general.xcl" --backend -f "D:\Project\Mentally retarded car\KV58 For mentally retarded car\KV58 For mentally retarded car Version Dual Core\settings\demoLQ_KV58F24.Release.driver.xcl" 
+& "C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.0\common\bin\cspybat" -f "C:\Users\Administrator\Desktop\龙邱7725例程\龙邱KV58 + OV7725例程\LQ_KV58F24第3版20181130\LQ_KV58F24第3版20181120\settings\demoLQ_KV58F24.Release.general.xcl" --backend -f "C:\Users\Administrator\Desktop\龙邱7725例程\龙邱KV58 + OV7725例程\LQ_KV58F24第3版20181130\LQ_KV58F24第3版20181120\settings\demoLQ_KV58F24.Release.driver.xcl" 
 }
 else
 {
-& "D:\Program Files (x86)\IAR Systems\Embedded Workbench 8.0\common\bin\cspybat" -f "D:\Project\Mentally retarded car\KV58 For mentally retarded car\KV58 For mentally retarded car Version Dual Core\settings\demoLQ_KV58F24.Release.general.xcl" --debug_file=$debugfile --backend -f "D:\Project\Mentally retarded car\KV58 For mentally retarded car\KV58 For mentally retarded car Version Dual Core\settings\demoLQ_KV58F24.Release.driver.xcl" 
+& "C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.0\common\bin\cspybat" -f "C:\Users\Administrator\Desktop\龙邱7725例程\龙邱KV58 + OV7725例程\LQ_KV58F24第3版20181130\LQ_KV58F24第3版20181120\settings\demoLQ_KV58F24.Release.general.xcl" --debug_file=$debugfile --backend -f "C:\Users\Administrator\Desktop\龙邱7725例程\龙邱KV58 + OV7725例程\LQ_KV58F24第3版20181130\LQ_KV58F24第3版20181120\settings\demoLQ_KV58F24.Release.driver.xcl" 
 }

@@ -21,7 +21,6 @@ QQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQ*/
 extern uint32 core_clk_M;//单位MHZ
 extern uint32 bus_clk_M;//单位MHZ
 
-extern int VirtualOscilloscopeData[4];
 //定义模块号
 typedef enum
 {
@@ -38,8 +37,8 @@ extern UART_MemMapPtr UARTN[UART_MAX];
 
 /**********************************  UART(引脚复用)已确认20171218***************************/
 //      模块通道    端口          可选范围                          建议
-#define UART0_RX    PTB16       //PTA1、PTA15、PTB16、PTD6 PTE21 PTB0 PTC6      PTA1不要用（与J-LINK冲突）
-#define UART0_TX    PTB17       //PTA2、PTA14、PTB17、PTD7 PTE20 PTB1 PTC7     PTA2不要用（与J-LINK冲突）
+#define UART0_RX    PTA15       //PTA1、PTA15、PTB16、PTD6 PTE21 PTB0 PTC6      PTA1不要用（与J-LINK冲突）
+#define UART0_TX    PTA14       //PTA2、PTA14、PTB17、PTD7 PTE20 PTB1 PTC7     PTA2不要用（与J-LINK冲突）
 
 #define UART1_RX    PTC3        //PTC3、PTE1
 #define UART1_TX    PTC4        //PTC4、PTE0
@@ -53,8 +52,8 @@ extern UART_MemMapPtr UARTN[UART_MAX];
 #define UART4_RX    PTE25       //PTC14、PTE25
 #define UART4_TX    PTE24       //PTC15、PTE24
 
-#define UART5_RX    PTE9        //PTD8 、PTE9 
-#define UART5_TX    PTE8        //PTD9 、PTE8 
+#define UART5_RX    PTD8        //PTD8 、PTE9
+#define UART5_TX    PTD9        //PTD9 、PTE8
 /**********************************  UART(引脚复用) ***************************************/
 
 
@@ -80,9 +79,6 @@ extern void UART1_IRQHandler(void);
 extern void UART2_IRQHandler(void);
 extern void UART3_IRQHandler(void);
 extern void UART4_IRQHandler(void);
-
-extern int VirtualOscilloscope(int *data);
-extern void VirtualOscilloscopeOfVcan();
 /********************************************************************/
 void Test_UART(void);
 #endif 

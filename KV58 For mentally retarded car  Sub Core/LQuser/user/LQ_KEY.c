@@ -19,41 +19,29 @@ QQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQ*/
 
 void KEY_Init(void)
 {
-  GPIO_Init(GPIOB,19,GPI,1);
-
+  GPIO_Init(GPIOB,20,GPI,1);
+  GPIO_Init(GPIOB,21,GPI,1);
+  GPIO_Init(GPIOB,22,GPI,1);   
 }
 
-//u8 KEY_Read(KEYn_e keyno)
-//{
-//  switch(keyno)
-//  {
-//  case down:
-//    return GPIO_Get(PTC7);
-//    break;
-//
-//  case left:
-//    return GPIO_Get(PTC8);
-//    break;
-//
-//  case middle:
-//    return GPIO_Get(PTC9);
-//    break;
-//
-//  case right:
-//    return GPIO_Get(PTC12);
-//    break;
-//
-//  case up:
-//    return GPIO_Get(PTC13);
-//    break;
-//
-//  default:
-//    return 0XFF;
-//  }
-//}
-
-u8 KEYRead(){
-  return GPIO_Get(PTB19);
+u8 KEY_Read(KEYn_e keyno)
+{
+  switch(keyno) 
+  {
+  case KEY0:
+    return GPIO_Get(PTB20);
+    break;
+    
+  case KEY1:
+    return GPIO_Get(PTB21);
+    break;
+    
+  case KEY2:
+    return GPIO_Get(PTB22);
+    break;
+  default:
+    return 0XFF;    
+  }
 }
 
 /*LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL
@@ -70,13 +58,13 @@ void Test_GPIO_KEY(void)
   while (1)
   {  
     //测试按键      
-    if(KEY_Read(up)==0)
+    if(KEY_Read(KEY0)==0)
       LCD_P6x8Str(13,3,(uint8_t*)"KEY0 Pressed!   ");
     else LCD_P6x8Str(13,3,(uint8_t*)"KEY0 NO Pressed!");
-    if(KEY_Read(down)==0)
+    if(KEY_Read(KEY1)==0)
       LCD_P6x8Str(13,5,(uint8_t*)"KEY1 Pressed!   ");
     else LCD_P6x8Str(13,5,(uint8_t*)"KEY1 NO Pressed!");
-    if(KEY_Read(middle)==0)
+    if(KEY_Read(KEY2)==0)
       LCD_P6x8Str(13,7,(uint8_t*)"KEY2 Pressed!   ");
     else LCD_P6x8Str(13,7,(uint8_t*)"KEY2 NO Pressed!");
     
@@ -88,31 +76,31 @@ void Test_GPIO_KEY(void)
   }
 }
 
-void PORTB_IRQHandler(void)
-{
-  int n;
-  n=20;
-  if((PORTB_ISFR & (1<<n)))
-  {
-      PORTB_ISFR |= (1<<n);
-      /* 用户自行添加中断内程序 */
-      LED_Ctrl(LED0, RVS); 
-  }
-  n=21;
-  if((PORTB_ISFR & (1<<n)))
-  {
-      PORTB_ISFR |= (1<<n);
-      /* 用户自行添加中断内程序 */
-      LED_Ctrl(LED1, RVS); 
-  }
-  n=22;
-  if((PORTB_ISFR & (1<<n)))
-  {
-      PORTB_ISFR |= (1<<n);
-      /* 用户自行添加中断内程序 */
-      LED_Ctrl(LED2, RVS); 
-  }
-}
+//void PORTB_IRQHandler(void)
+//{
+//  int n;
+//  n=20;
+//  if((PORTB_ISFR & (1<<n)))
+//  {
+//      PORTB_ISFR |= (1<<n);
+//      /* 用户自行添加中断内程序 */
+//      LED_Ctrl(LED0, RVS); 
+//  }
+//  n=21;
+//  if((PORTB_ISFR & (1<<n)))
+//  {
+//      PORTB_ISFR |= (1<<n);
+//      /* 用户自行添加中断内程序 */
+//      LED_Ctrl(LED1, RVS); 
+//  }
+//  n=22;
+//  if((PORTB_ISFR & (1<<n)))
+//  {
+//      PORTB_ISFR |= (1<<n);
+//      /* 用户自行添加中断内程序 */
+//      LED_Ctrl(LED2, RVS); 
+//  }
+//}
 
 void Test_GPIO_EXINT(void)
 {  

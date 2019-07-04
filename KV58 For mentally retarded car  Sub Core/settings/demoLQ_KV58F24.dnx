@@ -51,7 +51,7 @@
         <CHIPMODE>_ "NXP_KVx_KV58F1M0M24"</CHIPMODE>
     </PE_DEVICE>
     <DebugChecksum>
-        <Checksum>1135693544</Checksum>
+        <Checksum>461843100</Checksum>
     </DebugChecksum>
     <Exceptions>
         <StopOnUncaught>_ 0</StopOnUncaught>
@@ -68,7 +68,7 @@
         <MEMORYSTART1>_ "0"</MEMORYSTART1>
         <MEMORYSTART2>_ "0"</MEMORYSTART2>
         <MEMORYSTART3>_ "0"</MEMORYSTART3>
-        <DEFAULT_SOURCE_PATH>_ "C:\Program Files\IAR Systems\Embedded Workbench 7.5\arm\bin\pemicro\P&amp;E"</DEFAULT_SOURCE_PATH>
+        <DEFAULT_SOURCE_PATH>_ "F:\Program Files (x86)\IAR Systems\Embedded Workbench 7.5\arm\bin\pemicro\P&amp;E"</DEFAULT_SOURCE_PATH>
     </PE_SETTINGS>
     <PE_STARTUP12>
         <show_hstep_assembly_details_new>_ "0"</show_hstep_assembly_details_new>
@@ -225,6 +225,47 @@
     <Disassemble_mode>
         <mode>0</mode>
     </Disassemble_mode>
+    <Jet>
+        <JetConnSerialNo>97969900</JetConnSerialNo>
+        <JetConnFoundProbes />
+        <PrevWtdReset>Custom</PrevWtdReset>
+        <OnlineReset>Software</OnlineReset>
+        <DisableInterrupts>0</DisableInterrupts>
+        <LeaveRunning>0</LeaveRunning>
+        <MultiCoreRunAll>0</MultiCoreRunAll>
+    </Jet>
+    <PlDriver>
+        <FirstRun>0</FirstRun>
+        <MemConfigValue>C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.0\arm\CONFIG\debugger\NXP\MKV58F1M0xxx24.ddf</MemConfigValue>
+    </PlDriver>
+    <SWOManager>
+        <SamplingDivider>8192</SamplingDivider>
+        <OverrideClock>0</OverrideClock>
+        <CpuClock>1</CpuClock>
+        <SwoClock>436914068</SwoClock>
+        <DataLogMode>0</DataLogMode>
+        <ItmPortsEnabled>63</ItmPortsEnabled>
+        <ItmTermIOPorts>1</ItmTermIOPorts>
+        <ItmLogPorts>0</ItmLogPorts>
+        <ItmLogFile>$PROJ_DIR$\ITM.log</ItmLogFile>
+        <PowerForcePC>1</PowerForcePC>
+        <PowerConnectPC>1</PowerConnectPC>
+    </SWOManager>
+    <ArmDriver>
+        <EnableCache>1</EnableCache>
+    </ArmDriver>
+    <ETMTraceWindow>
+        <PortWidth>4</PortWidth>
+        <PortMode>0</PortMode>
+        <CaptureDataValues>0</CaptureDataValues>
+        <CaptureDataAddresses>0</CaptureDataAddresses>
+        <CaptureDataRange>0</CaptureDataRange>
+        <DataFirst>0</DataFirst>
+        <DataLast>4294967295</DataLast>
+        <StopWhen>0</StopWhen>
+        <StallCPU>0</StallCPU>
+        <NoPCCapture>0</NoPCCapture>
+    </ETMTraceWindow>
     <DriverProfiling>
         <Enabled>0</Enabled>
         <Mode>1</Mode>
@@ -296,6 +337,13 @@
         <ShowTimeSum>1</ShowTimeSum>
         <SumSortOrder>0</SumSortOrder>
     </EventLog>
+    <DisassembleMode>
+        <mode>0</mode>
+    </DisassembleMode>
+    <Breakpoints2>
+        <Bp0>_ 0 "EMUL_DATA" "UART_Put_Buff" 0 0 0 0 4294967295</Bp0>
+        <Count>1</Count>
+    </Breakpoints2>
     <LogFile>
         <LoggingEnabled>_ 0</LoggingEnabled>
         <LogFile>_ ""</LogFile>
@@ -305,22 +353,15 @@
         <LoggingEnabled>_ 0</LoggingEnabled>
         <LogFile>_ ""</LogFile>
     </TermIOLog>
+    <Aliases>
+        <A0>_ "C:\Users\Administrator\Desktop\龙邱7725例程\龙邱KV58 + OV7725例程\LQ_KV58F24第3版20181120\LQ_KV58F24第3版20181120\LQuser\user\LQOV7725.c" "C:\Users\Administrator\Desktop\龙邱7725例程\龙邱KV58 + OV7725例程\LQ_KV58F24第3版20181130\LQ_KV58F24第3版20181120\LQuser\user\LQOV7725.c"</A0>
+        <A1>_ "D:\桌面文件\测试专用库\LQ_KV58F24第3版20180424\LQ_KV58F24第3版\LQ_KV58F24第3版20181120\LQuser\devices\startup\startup.c" ""</A1>
+        <Count>2</Count>
+        <SuppressDialog>1</SuppressDialog>
+    </Aliases>
     <PowerProbe>
         <Frequency>10000</Frequency>
         <Probe0>I0</Probe0>
         <ProbeSetup0>2 1 1 2 0 0</ProbeSetup0>
     </PowerProbe>
-    <DisassembleMode>
-        <mode>0</mode>
-    </DisassembleMode>
-    <Breakpoints2>
-        <Bp0>_ 0 "EMUL_DATA" "UART_Put_Buff" 0 0 0 0 4294967295</Bp0>
-        <Bp1>_ 0 "EMUL_CODE" "" 0 0 1 "" 0 "" 0</Bp1>
-        <Bp2>_ 0 "EMUL_CODE" "" 0 0 1 "" 0 "" 0</Bp2>
-        <Count>3</Count>
-    </Breakpoints2>
-    <Aliases>
-        <Count>0</Count>
-        <SuppressDialog>0</SuppressDialog>
-    </Aliases>
 </settings>

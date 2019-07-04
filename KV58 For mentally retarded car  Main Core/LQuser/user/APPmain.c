@@ -156,10 +156,10 @@ void main(void)
   ADC0_Init();                  //ADC初始化
 
 
-  PIT_Init(PIT0, 10);           //定时器0初始化       舵机与电机的控制
-  PIT_Init(PIT1, 30);           //定时器1初始化       数据的处理
-//  PIT_Init(PIT2, 1000);            //定时器2初始化     陀螺仪数据的处理
-  PIT_Init(PIT3, 100);          //定时器2初始化     菜单的显示
+  PIT_Init(PIT0, 5);           //定时器0初始化       舵机与电机的控制
+  PIT_Init(PIT1, 25);           //定时器1初始化       数据的处理
+  PIT_Init(PIT2, 70);            //定时器2初始化     陀螺仪数据的处理
+  PIT_Init(PIT3, 120);          //定时器2初始化     菜单的显示
 //  GyroInit();
 
 
@@ -212,7 +212,7 @@ void main(void)
 
 
   while(1){
-    
+
       //PTD7_OUT=0;
       //PTC14_OUT=1; 
 //    BEE_OFF;

@@ -301,7 +301,7 @@ void PLL_Init(clk_option opt)
       break;//(初始化未成功，系统默认系统时钟为275M)
     }
   }
-  core_clk_M= 50 * ( pll_vdiv+16 )/2/(pll_prdiv+1);
+  core_clk_M= 50 * ( pll_vdiv+16 )/2/(pll_prdiv+1);           
   bus_clk_M =core_clk_M/2;  
   
   MCG_C1 = MCG_C1_CLKS(2) ;//选择外部时钟

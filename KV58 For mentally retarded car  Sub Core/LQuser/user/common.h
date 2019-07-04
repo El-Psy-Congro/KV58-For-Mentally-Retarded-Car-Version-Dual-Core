@@ -34,8 +34,8 @@ typedef unsigned long int	uint32; /* 32 bits */
 //typedef unsigned short int	uint16_t; /* 16 bits */
 //typedef unsigned long int	uint32_t; /* 32 bits */
 
-typedef char		    int8;   /*  8 bits */
-typedef short int	    int16;  /* 16 bits */
+typedef char		int8;   /*  8 bits */
+typedef short int	       	int16;  /* 16 bits */
 typedef int		       	int32;  /* 32 bits */
 
 typedef volatile int8	vint8;  /*  8 bits */
@@ -47,15 +47,15 @@ typedef volatile uint16	vuint16; /* 16 bits */
 typedef volatile uint32	vuint32; /* 32 bits */
 
 
-typedef unsigned char       u8;	  //无符号型
-typedef unsigned short int  u16;
-typedef unsigned int        u32;
-typedef unsigned long int   u64;
+typedef unsigned char         u8;	  //无符号型
+typedef unsigned short int   u16;
+typedef unsigned int          u32;
+typedef unsigned long int    u64;
 
 typedef char		        s8;	  //有符号型
 typedef short int	        s16;
-typedef int		            s32;
-typedef long int    	    s64;
+typedef int		        s32;
+typedef long int    	        s64;
 
 
 /*****************************设置数据类型*****************************/

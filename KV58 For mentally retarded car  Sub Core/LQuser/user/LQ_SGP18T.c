@@ -27,21 +27,21 @@ QQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQ*/
 其他说明：无
 **********************************************************/
 
-#define TFTSPI_CS     PTE30_OUT    //CS
-#define TFTSPI_SCL    PTE29_OUT    //SCL
-#define TFTSPI_SDA    PTE21_OUT    //SDI
-#define TFTSPI_DC     PTE20_OUT    //DC
-#define TFTSPI_RST    PTE19_OUT    //RST
+#define TFTSPI_CS     PEA25_OUT    //CS
+#define TFTSPI_SCL    PTA24_OUT    //SCL
+#define TFTSPI_SDA    PTA17_OUT    //SDI
+#define TFTSPI_DC     PTA16_OUT    //DC
+#define TFTSPI_RST    PTA15_OUT    //RST
   
  
 void TFTSPI_Init(void)
 { 	
   //-----端口初始化----//
-  GPIO_Init(GPIOE,19,GPO,0);
-  GPIO_Init(GPIOE,20,GPO,0);
-  GPIO_Init(GPIOE,21,GPO,0);
-  GPIO_Init(GPIOE,29,GPO,0);
-  GPIO_Init(GPIOE,30,GPO,0);
+  GPIO_Init(GPIOA,15,GPO,0);
+  GPIO_Init(GPIOA,16,GPO,0);
+  GPIO_Init(GPIOA,17,GPO,0);
+  GPIO_Init(GPIOA,24,GPO,0);
+  GPIO_Init(GPIOA,25,GPO,0);
   
   TFTSPI_RST=0;
   time_delay_ms(50);                   
@@ -113,7 +113,7 @@ void TFTSPI_Init(void)
   TFTSPI_Write_Byte(0x00);		//纵坐标结束地址0x009f(159)  
   TFTSPI_Write_Byte(0xb3);                //9f  
   TFTSPI_Write_Cmd(0x36);              //配置MPU和DDRAM对应关系
-#ifdef Vertical 
+#if 0 
   TFTSPI_Write_Byte(0xC0);                //竖屏显示          //MX=1,MY=1
 #else
   TFTSPI_Write_Byte(0xA0);            	//横屏显示
@@ -121,9 +121,7 @@ void TFTSPI_Init(void)
   TFTSPI_Write_Cmd(0xb7);              //LCD Driveing control
   TFTSPI_Write_Byte(0x00);		//CRL=0  
   TFTSPI_Write_Cmd(0x29);   		//开启屏幕显示
-  TFTSPI_Write_Cmd(0x2c);   		//设置为LCD接收数据/命令模式
-
-  monitorSelection = TFT;
+  TFTSPI_Write_Cmd(0x2c);   		//设置为LCD接收数据/命令模式  
 }
 
 void tft18delay_1us(unsigned int Del)		//
@@ -158,10 +156,10 @@ void TFTSPI_Write_Byte(uint8_t dat)
   TFTSPI_DC=1;// A0=1  ILI9163_A0=1;		  //A0=1发送数据  				
   for(i=0;i<8;i++)
   {
-    TFTSPI_SCL=0;tft18delay_1us(1);	// SCK=0  ILI9163_SCK=0; 	    
+    TFTSPI_SCL=0;//tft18delay_1us(1);	// SCK=0  ILI9163_SCK=0; 	    
     if(dat&0x80){TFTSPI_SDA=1;}// SDI=1
     else{TFTSPI_SDA=0;}// SDI=0             
-    TFTSPI_SCL=1;tft18delay_1us(1);	// SCK=1 ILI9163_SCK = 1;
+    TFTSPI_SCL=1;//tft18delay_1us(1);	// SCK=1 ILI9163_SCK = 1;
     dat = (dat<<1);    
   }
 }
@@ -175,10 +173,10 @@ void TFTSPI_Write_Word(uint16_t dat)
   
   for(i=0;i<16;i++)
   {
-    TFTSPI_SCL=0;tft18delay_1us(1);	// SCK=0  ILI9163_SCK=0;  
+    TFTSPI_SCL=0;//tft18delay_1us(1);	// SCK=0  ILI9163_SCK=0;  
     if(dat&0x8000){ TFTSPI_SDA=1;}// SDI=1
     else{TFTSPI_SDA=0;}// SDI=0
-    TFTSPI_SCL=1;tft18delay_1us(1);	// SCK=1  ILI9163_SCK=1;
+    TFTSPI_SCL=1;//tft18delay_1us(1);	// SCK=1  ILI9163_SCK=1;
     dat<<=1;    
   }  
 }
@@ -1084,21 +1082,16 @@ void TFTSPI_P6X8Str(uint8_t x, uint8_t y, uint8_t *s_dat,uint16_t word_color,uin
 void TFTSPI_P6X8NUM(uint8_t x, uint8_t y, uint16_t num, uint8_t num_bit,uint16_t word_color,uint16_t back_color)
 {
   char i;
-  uint8_t ii;
+  //uint8_t ii;
   uint8_t dat[6];
   for(i = 0; i < 6; i++) dat[i] = 0; i = 0;	//初始化数据
   while(num / 10)								//拆位
   {
-    dat[i] = num % 10;						//最低位
+    dat[i] = num % 10 + 48;						        ////转换成asc码
+    TFTSPI_P6X8(x + num_bit - i - 1, y, ' ',word_color,back_color);		//清显示区域
+    TFTSPI_P6X8(x + num_bit - i - 1, y, dat[i],word_color,back_color);		//输出数值
     num /= 10; i++;		
   }
-  dat[i] = num;								//最高位
-  ii = i;										//保存dat的位数
-  for(; i >= 0; i--)	dat[i] += 48;			//转化成ASCII
-  for(i = 0; i < num_bit; i++)
-    TFTSPI_P6X8(x, y + i, ' ',word_color,back_color);		//清显示区域
-  for(i = ii; i >= 0; i--)
-    TFTSPI_P6X8(x++, y, dat[i],word_color,back_color);		//输出数值
 }
 /*--------------------------------------------------------------*/
 
@@ -1144,21 +1137,16 @@ void TFTSPI_P8X8Str(uint8_t x, uint8_t y, uint8_t *s_dat,uint16_t word_color,uin
 void TFTSPI_P8X8NUM(uint8_t x, uint8_t y, uint16_t num, uint8_t num_bit,uint16_t word_color,uint16_t back_color)
 {
   char i;
-  uint8_t ii;
+  uint8_t ii = num_bit;
   uint8_t dat[6];
   for(i = 0; i < 6; i++) dat[i] = 0; i = 0;	//初始化数据
-  while(num / 10)								//拆位
+  while(ii--)								//拆位
   {
-    dat[i] = num % 10;						//最低位
+    dat[i] = num % 10 + 48;						//转换成asc码
+    TFTSPI_P8X8(x + num_bit - i - 1, y, ' ',word_color,back_color);	//清除当前要显示的位置				//清显示区域
+    TFTSPI_P8X8(x + num_bit - i - 1, y, dat[i],word_color,back_color);	//显示				//输出数值
     num /= 10; i++;		
   }
-  dat[i] = num;								//最高位
-  ii = i;										//保存dat的位数
-  for(; i >= 0; i--)	dat[i] += 48;			//转化成ASCII
-  for(i = 0; i < num_bit; i++)
-    TFTSPI_P8X8(x, y + i, ' ',word_color,back_color);					//清显示区域
-  for(i = ii; i >= 0; i--)
-    TFTSPI_P8X8(x, y++, dat[i],word_color,back_color);					//输出数值
 }
 
 uint8_t ColumnarMAX=5;
@@ -1231,16 +1219,16 @@ void TFTSPI_Show_Pic2(uint8_t xs,uint8_t ys,uint8_t w,uint8_t h,uint8_t *ppic)
     }
  }
 
-void TFTSPI_Show_Battery_Icon(void)
+/*void TFTSPI_Show_Battery_Icon(void)
 {
     TFTSPI_Show_Pic2(138,2,20,10,gImage_Battery_S); //显示电池图标20*10像素
-}
+}*/
 
-void TFTSPI_Show_Title(void)
+/*void TFTSPI_Show_Title(void)
 {
     TFTSPI_Show_Pic2(0,0,92,28,gImage_title2);
     TFTSPI_Draw_Line(0,24,160,24,u16BLACK);   //补齐分割线
-}
+}*/
 
 void TFTSPI_Show_Logo(uint8_t xs,uint8_t ys)
 {
@@ -1259,14 +1247,16 @@ void DrawSpectrum(void)
 void TFTSPI_Test(void)
 { 
   
-
-  TFTSPI_CLS(u16WHITE);//蓝色屏幕
-  TFTSPI_Show_Logo(0,37);  
-  TFTSPI_P16x16Str(0,0,"北京龙邱智能科技",u16RED,u16BLUE);		//字符串显示
-  TFTSPI_P8X16Str(0,1,"Long Qiu i.s.t.",u16WHITE,u16BLACK);		//字符串显示  
+  TFTSPI_Init();   
+  TFTSPI_CLS(u16BLUE);//蓝色屏幕	
+ // TFTSPI_Show_Logo(0,37);  
+ // TFTSPI_P16x16Str(0,0,"北京龙邱智能科技",u16RED,u16BLUE);		//字符串显示
+  //TFTSPI_P8X16Str(0,1,"Long Qiu i.s.t.",u16WHITE,u16BLACK);		//字符串显示  
   
   while(1)
-    {   
+    { 
+      TFTSPI_P8X8NUM(0, 0, 100, 3,u16RED,u16BLUE);
+      TFTSPI_P8X8NUM(5, 0, 123, 3,u16RED,u16BLUE);
       LED_Ctrl(LED1, RVS);//反转       
       time_delay_ms(500); //延时           
     }

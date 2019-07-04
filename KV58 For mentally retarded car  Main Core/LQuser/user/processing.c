@@ -12,7 +12,7 @@
 
 /*****************************************************************/
 
-int servoMedian = 5250, graphMedian = 0, servo = 0, angle = 0, gyroLast = 0;
+int servoMedian = 5300, graphMedian = 0, servo = 0, angle = 0, gyroLast = 0, ElectromagnetismMedian;
 float angleFromGyro = 0, angleFromAcceleration = 0;
 /*****************************************************************/
 int dRpm = 0, M = 0;
@@ -21,9 +21,9 @@ double steeringAngle;
 
 
 /*****************************Electromagnetism************************************/
-uint16_t ADvalue[6]={0,0,0,0,0,0};
-uint16_t AD_Data[6]={0,0,0,0,0,0};
-int admax[6]={35000,35000,35000,35000,35000,35000}, admin[6]={2,2,2,2,2,2};
+uint16_t ADvalue[7]={0,0,0,0,0,0,0};
+uint16_t AD_Data[7]={0,0,0,0,0,0,0};
+int admax[7]={35000,35000,35000,35000,35000,35000,35000}, admin[7]={2,2,2,2,2,2,2};
 int ia;
 int AD_sum=0;
 int AD_cha=0;
@@ -31,44 +31,67 @@ int flag1=0;
 int flag2=0;
 int flag3=0;
 int flag4=0;
+int len=0;
 /*****************************************************************/
 
 /*****************************Graph*******************************/
-u8 line=40;                           //当前使用行;
-
-s8
+s16
+  line=40,                           //当前使用行;
+  prospect = 0;                      //前瞻
+s16
   edgeLeft[GRAPH_HIGHT],
   edgeRight[GRAPH_HIGHT],               //左右边界
   graphicMedian[GRAPH_HIGHT] = 47;       //每一行图像中值
   
-s8 laneWidth[60] = {10,10,10,10,10,10,10,10,11,13,13,15,        //道路宽度     应梯形形变所以宽度不一
-                    16,17,19,19,20,22,23,24,25,26,27,28,
-                    30,30,32,33,34,35,37,38,38,40,41,42,
-                    43,45,45,47,48,48,50,51,52,53,55,55,
-                    57,58,59,60,61,62,64,64,65,67,67,69};
+s16 laneWidth[GRAPH_HIGHT] = {10,10,10,10,10,10,10,10,11,13,      //道路宽度     应梯形形变所以宽度不一
+                              13,15,16,17,19,19,20,22,23,24,
+                              25,26,27,28,30,30,32,33,34,35,
+                              37,38,38,40,41,42,43,45,45,47,
+                              48,48,50,51,52,53,55,55,57,58,
+                              59,60,61,62,64,64,65,67,67,69,
+                              70,71,72,73,74,75,76,76,77,77,};
 
 
 
 bool
-  isIslandLeft = false,
-  isIslandRight = false,
   isEdgeLeft[GRAPH_HIGHT],
   isEdgeRight[GRAPH_HIGHT],             //左右边界存在标志      存在为true 不存在为false
-  isEdgeMedian[GRAPH_HIGHT];            //中线存在标志               存在为true 不存在为false  左右边界都不存在  不能导出 中线不存在
+  isEdgeMedian[GRAPH_HIGHT],            //中线存在标志               存在为true 不存在为false  左右边界都不存在  不能导出 中线不存在
+  isGraph = false;                      //是否使用摄像头
 
 
-s8                                      //卷积核
+s16                                      //卷积核
   kernelSobelX[3][3] = {{-1, -2, -1}, {0, 0, 0}, {1, 2, 1}},
   kernelSobelY[3][3] = {{-1, 0, 1}, {-2, 0, 2}, {-1, 0, 1}},
   kernelGaussian[5][5] = {{2,4,5,4,2},{4,9,12,9,4},{5,12,15,12,5},{4,9,12,9,4},{2,4,5,4,2}};
 
-s8
+s16
   kernelImageX[GRAPH_HIGHT][GRAPH_WIDTH],
   kernelImageY[GRAPH_HIGHT][GRAPH_WIDTH],
   kernelImage[GRAPH_HIGHT][GRAPH_WIDTH],
   gaussianImage[GRAPH_HIGHT][GRAPH_WIDTH];
 
+
 /*****************************************************************/
+
+/*************************Island*******************************/
+u8
+  islandLeftPreliminary = 0,
+  islandRightPreliminary = 0,
+  islandLeftFlag = 0,
+  islandRightFlag = 0;
+  
+
+bool
+  isIslandLeft = false,
+  isIslandRight = false,
+  isIslandElectromagnetism = false;
+
+
+/*****************************************************************/
+
+
+
 
 /*************************Speed**********************************/
 bool
@@ -81,38 +104,45 @@ int DataFusion(){
   GetUseImage();                       //采集图像数据存放数组  移到了IsDisconnectRoad();
   thresholdOfGraph = GetOSTU(imageData);      //OSTU大津法 获取全局阈值
   GetBinarizationValue();              //二值化图像数据
+  GraphFilter();
   GraphProcessing();
+  ElectromagnetismProcessing();
+  IsModeSwitch();
 
-  if(0){
-
-    servo = servoMedian - PIDPositional(ElectromagnetismProcessingOfIsland(), &PIDServoOfElectromagnetism);
-  }else if(0){
-    servo = servoMedian - PIDPositional(ElectromagnetismProcessingOfIsland(), &PIDServoOfElectromagnetism);
-
-  }else if(){//
-    servo = servoMedian - PIDPositional(ElectromagnetismProcessingOfBasics(), &PIDServoOfElectromagnetism);
-//    BEE_ON;
-  }else{
+  if(isGraph){//
     servo = servoMedian + PIDFuzzy(&graphic, &PIDServoOfGraph);
     BEE_OFF;
+  }else{
+    BEE_ON;
+    servo = servoMedian - PIDPositional(ElectromagnetismMedian, &PIDServoOfElectromagnetism);
+
   }
   if(IsGraphProcessingOfFinishLine()){
     isStop = true;
   }
     
-  GraphProcessingOfEnteringStraightLaneAccelerate();
+
+  if(isStop || ElectromagnetismProcessingOfLoseDataForStop()){
+    PIDMotor.setPoint = 0;
+//    BEE_OFF;
+  }else{
+    PIDMotor.setPoint = 70;
+//    GraphProcessingOfEnteringStraightLaneAccelerate();
+  }
+
 
   DifferentialSpeed();
   
 
 }
 
-bool isModeSwitch(){
-  if(!isEdgeLeft[line] && !isEdgeLeft[line] && GraphProcessingOfLineWhitePointCounting(line, 4, 92)){
-    return true;
-  }else{
-    return false;
+bool IsModeSwitch(){
+
+  if(isIslandElectromagnetism){
+    isGraph = false;
   }
+
+  return true;
 }
 /*
  * 差速计算
@@ -210,11 +240,11 @@ int GraphProcessingOfCannyEdgeDetection(){
 int GraphProcessingOfEdgeFluctuation(){
 //    graph[GRAPH_HIGHT][LCHW]
   //  GraphProcessingOfLineScanFromEdge(LINE_INITIAL);
-    for(int i = LINE_INITIAL; i > LINE_TERMINATION; i--){
+  for(int i = LINE_INITIAL; i > LINE_TERMINATION; i--){
       isEdgeLeft[i] = false;
       isEdgeRight[i] = false;
       isEdgeMedian[i] = false;
-
+      isGraph = false;
 
       if(!graph[i][graphicMedian[i+1]]){
         if(i == LINE_INITIAL){
@@ -222,13 +252,40 @@ int GraphProcessingOfEdgeFluctuation(){
           graphicMedian[i] = (edgeLeft[i] + edgeRight[i])/2;
         }else{
           GraphProcessingOfLineScanFromCentralDiffusion(i);
-        graphicMedian[i] = (edgeLeft[i] + edgeRight[i])/2;
+          graphicMedian[i] = (edgeLeft[i] + edgeRight[i])/2;
       }
     }else{
       GraphProcessingOfLineScanFromSettingPoint(i, graphicMedian[i+1]);
       graphicMedian[i] = (edgeLeft[i] + edgeRight[i])/2;
     }
+
+
+
+
+    if(isEdgeLeft[i] || isEdgeRight[i]){
+      isEdgeMedian[i] = true;
+      graph[i][graphicMedian[i]] = 0;
+      prospect = i;
+    }
+
   }
+
+  if(prospect < 40){
+    line = 40;
+  }
+
+  for(int i = line; i < LINE_INITIAL; i++){
+    if(isEdgeMedian[i]){
+      line = i;
+    }
+  }
+  line = 45;
+
+  if(isEdgeMedian[line]){
+    isGraph = true;
+  }else{
+  }
+
 
   
 /***********************环岛判断******************************/
@@ -243,9 +300,12 @@ int GraphProcessingOfEdgeFluctuation(){
   for(int i = GRAPH_WIDTH; i > 0; i--){
     graph[line][i] = 0;
     graph[LINE_MEDIAN][i] = 0;
+
     graph[LINE_INITIAL][i] = 0;
+
     graph[LINE_TERMINATION][i] = 0;
-    graph[LINE_TERMINATION + 10][i] = 0;
+
+
   }
 
 //  for(int i = 14; i<40; i++){
@@ -255,18 +315,28 @@ int GraphProcessingOfEdgeFluctuation(){
 //  }
 
   if(isEdgeLeft[line] && !isEdgeRight[line]){
-    graph[line][LimitingAmplitudeVersionReturn(edgeLeft[line] + laneWidth[line], 0, 93)] = 0;             //oled显示观测点
-    return LimitingAmplitudeVersionReturn(edgeLeft[line] + laneWidth[line], 0, 93);
+    graphicMedian[line] = edgeLeft[line] + laneWidth[line];
   }else if(!isEdgeLeft[line] && isEdgeRight[line]){
-    graph[line][LimitingAmplitudeVersionReturn(edgeRight[line] - laneWidth[line], 0, 93)] = 0;
-    return LimitingAmplitudeVersionReturn(edgeRight[line] - laneWidth[line], 0, 93);
+    graphicMedian[line] = edgeRight[line] - laneWidth[line];
   }
+
 //  for(int i = ){
 //  }
+  u8 tex[16];
+  sprintf(tex,"%03d",graphicMedian[line]);
+  LCD_P6x8Str(0,4,(u8*)tex);
   graph[line][graphicMedian[line]] = 0;
   return graphicMedian[line];
 }
 
+/*
+ *
+ */
+
+
+/*
+ * 从中间向两边扫描
+ */
 void GraphProcessingOfLineScanFromMedian(int i){
   for(int j = graphicMedian[i+1]; j>LINE_EDGE_LEFT; j--){
     if(!graph[i][j] && !graph[i][j-1] && graph[i][j+1] && graph[i][j+2]){
@@ -370,6 +440,16 @@ int GraphProcessingOfSquareAreaWhitePointCounting(int x, int y, int area){
   return count;
 }
 
+
+bool GraphProcessingOfEnteringIslandforLeftPreconditions(){
+  if(IsStaightLine(edgeRight, isEdgeRight, 40, 35, 2, 0.9)){
+    islandLeftPreliminary = 20;
+//    BEE_ON;
+  }else{
+    islandLeftPreliminary--;
+//    BEE_OFF;
+  }
+}
 /*
  * 进环岛判断——左
  * 返回bool   true 为是环岛           false为不是环岛
@@ -381,6 +461,7 @@ int GraphProcessingOfSquareAreaWhitePointCounting(int x, int y, int area){
  *          在检测尖角上面是否有大量黑点，尖角下面是否几乎全部为黑色
  */
 bool GraphProcessingOfEnteringIslandforLeft(){
+  GraphProcessingOfEnteringIslandforLeftPreconditions();
   if(IsStaightLine(edgeRight, isEdgeRight, 45, 35, 2, 0.5)){
     for(int i = LINE_TERMINATION; i < LINE_INITIAL - 7; i++){
       if(isEdgeLeft[i] && isEdgeLeft[i+1] && isEdgeLeft[i+2] && !isEdgeLeft[i+3] && !isEdgeLeft[i+4] && !isEdgeLeft[i+5]){
@@ -530,7 +611,7 @@ bool GraphProcessingOfEnteringIslandforRight(){
 }
 
 
-s8 GraphProcessingOfLineScanFromQuarters(int i){
+s16 GraphProcessingOfLineScanFromQuarters(int i){
 //  if(graph[i][LINE_EDGE_LEFT] && !graph[i][LINE_EDGE_RIGHT]){
 //
 //  }else if(!graph[i][LINE_EDGE_LEFT] && graph[i][LINE_EDGE_RIGHT]){
@@ -550,21 +631,16 @@ s8 GraphProcessingOfLineScanFromQuarters(int i){
  */
 void GraphProcessingOfEnteringStraightLaneAccelerate(){
 
-  if(isStop){
-    PIDMotor.setPoint = 0;
-    BEE_OFF;
-  }else if(IsStraightLane()){
-   BEE_ON;
+if(IsStraightLane()){
+//   BEE_ON;
     line = 25;
-    PIDMotor.setPoint = 180;
+    PIDMotor.setPoint = 100;
     PIDServoOfGraph.proportion = 6;  //0.27
-  }else if(!ElectromagnetismProcessingOfLoseDataForStop()){
-    BEE_OFF;
+  }else{
+//    BEE_OFF;
     PIDMotor.setPoint = 100;
     line = 40;
     PIDServoOfGraph.proportion = 9;  //0.27
-  }else{
-    PIDMotor.setPoint = 0;
   }
 }
 
@@ -645,7 +721,7 @@ bool IsGraphProcessingOfFinishLine(){
  *      0~1 之间
  *      越大要求边的存在个数越多
  */
-bool IsStaightLine(s8 line[], bool isExistence[], u8 initial, u8 half, u8 allowableError, float MIissing){
+bool IsStaightLine(s16 line[], bool isExistence[], u8 initial, u8 half, u8 allowableError, float MIissing){
 //  int accumulator[180][200];
 //  int radius;
 //  for(int i = LINE_TERMINATION; i > GRAPH_HIGHT/2; i--){
@@ -733,21 +809,21 @@ bool IsStaightLine(s8 line[], bool isExistence[], u8 initial, u8 half, u8 allowa
 }
 
 bool IsStraightLane(){
-  if(IsStaightLine(edgeLeft, isEdgeLeft, 45, 30, 2, 0.5) 
-     && IsStaightLine(edgeRight, isEdgeRight, 45, 30, 2, 0.5)){
+  if(IsStaightLine(edgeLeft, isEdgeLeft, 40, 30, 2, 0.8)
+     && IsStaightLine(edgeRight, isEdgeRight, 40, 30, 2, 0.8)){
     return true;
   }else{
     return false;
   }
 }
 
-
 int ElectromagnetismProcessing(){
-  return ElectromagnetismProcessingOfBasics();
+  ElectromagnetismMedian = ElectromagnetismProcessingOfBasics2();
+  return 0;
 }
 
 int ElectromagnetismProcessingOfBasics(){
-  
+
 
   inductance.deviationLast = inductance.deviationNow;
   //inductance.deviationNow = (int)(ADC0_Ave(L_1,ADC_16bit,10)-ADC0_Ave(L_6,ADC_16bit,10)+ADC0_Ave(L_3,ADC_16bit,10)-ADC0_Ave(L_4,ADC_16bit,10))*10000
@@ -756,7 +832,8 @@ int ElectromagnetismProcessingOfBasics(){
      AD_Data[1]=AD_Data1;
      AD_Data[2]=AD_Data2;
      AD_Data[3]=AD_Data3;
-     AD_Data[4]=AD_Data4;
+     AD_Data[4]=AD_Data4;// 中间
+
 
   for(ia=0;ia<6;ia++)
   {
@@ -769,7 +846,7 @@ int ElectromagnetismProcessingOfBasics(){
 
 
 
-  if(ElectromagnetismProcessingOfIsland()){
+ if(ElectromagnetismProcessingOfIsland()){
     return -(35000-AD_Data4)/4;
   }
 
@@ -780,40 +857,93 @@ int ElectromagnetismProcessingOfBasics(){
 
     AD_cha=ADvalue[2]+ADvalue[3]-ADvalue[0]-ADvalue[1];
     //ADoí
-    AD_sum=ADvalue[0]+ADvalue[1]+ADvalue[3]+ADvalue[4];
+    AD_sum=ADvalue[0]+ADvalue[1]+ADvalue[2]+ADvalue[3];
 
        inductance.deviationNow=-((AD_cha*19000)/AD_sum);
-       
-       if(PTC15_OUT==1) 
-       {
-         flag4++;
-         if(flag4>=10)
-         {
-         inductance.deviationNow=-15;
-//           BEE_ON;
-         return inductance.deviationNow;
-         }
-       }
+
+//       if(PTC15_OUT==1)
+//       {
+//         flag4++;
+//         if(flag4>=10)
+//         {
+//         inductance.deviationNow=15;
+////           BEE_ON;
+//         return inductance.deviationNow;
+//         }
+//       }
+
+
+ // wangqiang = ButtterworthLowPassFiltering(inductance.deviationNow, &butterworthElectromagnetism, &Butter_60HZ_Parameter_Acce);
+  return     inductance.deviationNow;      //inductance.deviationNow;
+
+
+}
+int ElectromagnetismProcessingOfBasics2(){
+
+
+  inductance.deviationLast = inductance.deviationNow;
+  //inductance.deviationNow = (int)(ADC0_Ave(L_1,ADC_16bit,10)-ADC0_Ave(L_6,ADC_16bit,10)+ADC0_Ave(L_3,ADC_16bit,10)-ADC0_Ave(L_4,ADC_16bit,10))*10000
+    //(ADC0_Ave(L_1,ADC_16bit,10)+ADC0_Ave(L_6,ADC_16bit,10)+ADC0_Ave(L_3,ADC_16bit,10)+ADC0_Ave(L_4,ADC_16bit,10));
+     AD_Data[0]=AD_Data0;
+     AD_Data[1]=AD_Data1;
+     AD_Data[2]=AD_Data2;
+     AD_Data[3]=AD_Data3;//中间
+     AD_Data[4]=AD_Data4;
+     AD_Data[5]=AD_Data5;
+     AD_Data[6]=AD_Data6;
+
+  for(ia=0;ia<7;ia++)
+  {
+                if (AD_Data[ia]>admax[ia])
+                    AD_Data[ia]=admax[ia];
+                if (AD_Data[ia]<admin[ia])
+        AD_Data[ia]=admin[ia];
+        ADvalue[ia]=(float)(400*(AD_Data[ia]-admin[ia])/(admax[ia]-admin[ia]));
+    }
+
+
+
+  if(ElectromagnetismProcessingOfIsland()){
+    BEE_ON;
+    return -(35000-AD_Data3)/6;
+  }
+
+
+
+    //ad04=(float)((ADvalue[0]-ADvalue[3])/(ADvalue[0]+ADvalue[3]));
+    //ad13=(float)((ADvalue[1]-ADvalue[2])/(ADvalue[1]+ADvalue[2]));
+
+    AD_cha=ADvalue[4]+ADvalue[5]+ADvalue[6]-ADvalue[0]-ADvalue[1]-ADvalue[2];
+    //ADoí
+    AD_sum=ADvalue[0]+ADvalue[1]+ADvalue[2]+ADvalue[4]+ADvalue[5]+ADvalue[6];
+
+       inductance.deviationNow=-((AD_cha*16000)/AD_sum);
+
+
+
 
 
 
   return inductance.deviationNow;
 
 
+
+
+
 }
 
 bool ElectromagnetismProcessingOfIsland(){
-  if(AD_Data4>5000&&AD_Data0>22000)// 识别进园
+  if(AD_Data4>30000&&AD_Data0>22000)// 识别进园
   {  flag1++;
 
   }
 
-  if(flag1>0&&AD_Data3>15000)
+  if(flag1>0&&AD_Data3<7000&&AD_Data0>28000)
   {
     flag2++;
   }
 
-  if(flag2>0&&AD_Data0>26000&&AD_Data3>20000&&AD_Data4<3000)
+  if(flag2>0&&AD_Data0<32000&&AD_Data3>3400&&AD_Data6>20000)
   {
     flag3++;
   }
@@ -821,23 +951,24 @@ bool ElectromagnetismProcessingOfIsland(){
 
 
 
-  if(flag3>0&&AD_Data0>24000&&AD_Data3>24000)
+  if(flag3>0&&AD_Data0<29000&&AD_Data4<33000&&AD_Data3>8500)
   {
-//      BEE_ON;
-      return true;
+      //BEE_ON;
+      isIslandElectromagnetism = true;
 
   }else{
-    BEE_OFF;
+//    BEE_OFF;
   }
 
-  if(AD_Data4<4000&&AD_Data0<20000)
+  if(AD_Data3<4000&&AD_Data0<18000)
   {
     flag1=0;
     flag2=0;
     flag3=0;
+    isIslandElectromagnetism = false;
   }
 
-  return false;
+  return isIslandElectromagnetism;
 
 }
 
@@ -860,4 +991,21 @@ void GyroAngleProcessing(){
 
 
 
+}
+void Ultrasonic(){
+  char txt[16];
+  PTC14_OUT=1;
+  LPTMR_delay_us(20);
+  PTC14_OUT = 0;
+  while (GPIO_Get(PTC15) == 0);
+  while (GPIO_Get(PTC15) == 1) {
+    len++;
+    if (len > 100000) {
+      LCD_P8x16Str(10, 0, "ERROR");
+      break;
+    }
+  }
+  sprintf(txt, "%07d", len);
+  LCD_P8x16Str(10, 6, (u8*) txt);
+  len = 0;
 }

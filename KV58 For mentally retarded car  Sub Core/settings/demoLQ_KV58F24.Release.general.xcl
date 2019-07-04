@@ -1,14 +1,12 @@
-"D:\Program Files (x86)\IAR Systems\Embedded Workbench 8.0\arm\bin\armproc.dll" 
+"C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.0\arm\bin\armproc.dll" 
 
-"D:\Program Files (x86)\IAR Systems\Embedded Workbench 8.0\arm\bin\armjlink2.dll" 
+"C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.0\arm\bin\armJET.dll" 
 
-"D:\Project\Mentally retarded car\KV58 For mentally retarded car\KV58 For mentally retarded car Version Dual Core\release\gpio_example.out" 
+"C:\Users\Administrator\Desktop\龙邱7725例程\龙邱KV58 + OV7725例程\LQ_KV58F24第3版20181130\LQ_KV58F24第3版20181120\release\gpio_example.out" 
 
---plugin "D:\Program Files (x86)\IAR Systems\Embedded Workbench 8.0\arm\bin\armbat.dll" 
+--plugin "C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.0\arm\bin\armbat.dll" 
 
---device_macro "D:\Program Files (x86)\IAR Systems\Embedded Workbench 8.0\arm\config\debugger\NXP\KV5x.dmac" 
-
---flash_loader "D:\Program Files (x86)\IAR Systems\Embedded Workbench 8.0\arm\config\flashloader\NXP\FlashKV5xF1M0.board" 
+--device_macro "C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.0\arm\config\debugger\NXP\KV5x.dmac" 
 
 
 

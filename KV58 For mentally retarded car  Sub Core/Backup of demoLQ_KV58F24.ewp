@@ -673,7 +673,7 @@
         </option>
         <option>
           <name>IlinkOutputFile</name>
-          <state>gpio_example.out</state>
+          <state>demoLQ_KV58F24.out</state>
         </option>
         <option>
           <name>IlinkDebugInfoEnable</name>
@@ -705,8 +705,7 @@
         </option>
         <option>
           <name>IlinkConfigDefines</name>
-          <state>__stack_size__=0x2000</state>
-          <state>__heap_size__=0x2000</state>
+          <state></state>
         </option>
         <option>
           <name>IlinkMapFile</name>
@@ -738,7 +737,7 @@
         </option>
         <option>
           <name>IlinkIcfFile</name>
-          <state>$PROJ_DIR$/LQuser/devices/linker/MKV58F1M0xxx24_ram.icf</state>
+          <state>D:\&#x684C;&#x9762;&#x6587;&#x4eF6;\&#x6D4B;&#x8BD5;&#x4e13;&#x7528;&#x5e93;\LQ_KV58F24&#x7B2C;3&#x7248;20180424\LQ_KV58F24&#x7B2C;3&#x7248;1\LQ_KV58F24&#x7B2C;3&#x7248;20181120\LQuser\devices\linker\MKV58F1M0xxx24_flash.icf</state>
         </option>
         <option>
           <name>IlinkIcfFileSlave</name>
@@ -2214,6 +2213,12 @@
     </file>
     <file>
       <name>$PROJ_DIR$\LQuser\user\LQWDOG.h</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\LQuser\user\u_iic.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\LQuser\user\u_iic.h</name>
     </file>
   </group>
   <group>

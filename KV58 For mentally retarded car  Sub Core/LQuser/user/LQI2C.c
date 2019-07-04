@@ -43,11 +43,7 @@ void I2C_Init(I2Cn i2cn)
       PORTB_PCR2 = PORT_PCR_MUX(2);
       PORTB_PCR2 = PORTB_PCR2|(1<<5);//设置为开漏模式
     }
-    else if(I2C0_SCL == PTD8)
-    {
-      PORTD_PCR8 = PORT_PCR_MUX(2);
-      PORTD_PCR8 = PORTD_PCR8|(1<<5);//设置为开漏模式
-    }
+
     else if(I2C0_SCL == PTE19)
     {
       PORTE_PCR19 = PORT_PCR_MUX(4);
@@ -90,11 +86,7 @@ void I2C_Init(I2Cn i2cn)
       PORTB_PCR3 = PORT_PCR_MUX(2);
       PORTE_PCR3 = PORTE_PCR3|(1<<5);//设置为开漏模式
     }
-    else if(I2C0_SDA == PTD9)
-    {
-      PORTD_PCR9 = PORT_PCR_MUX(2);
-      PORTD_PCR9 = PORTD_PCR9|(1<<5);//设置为开漏模式
-    }  
+ 
     else if(I2C0_SDA == PTE18)
     {
       PORTE_PCR18 = PORT_PCR_MUX(4);
@@ -142,6 +134,11 @@ void I2C_Init(I2Cn i2cn)
       PORTC_PCR10 = PORT_PCR_MUX(2);
       PORTC_PCR10 = PORTC_PCR10|(1<<5);//设置为开漏模式
     }
+   else if(I2C0_SCL == PTD8)
+    {
+      PORTD_PCR8 = PORT_PCR_MUX(2);
+      PORTD_PCR8 = PORTD_PCR8|(1<<5);//设置为开漏模式
+    } 
     else if(I2C1_SCL == PTC14)
     {
       PORTC_PCR14 = PORT_PCR_MUX(2);
@@ -163,6 +160,11 @@ void I2C_Init(I2Cn i2cn)
       PORTC_PCR11 = PORT_PCR_MUX(2);
       PORTC_PCR11 = PORTC_PCR11 | (1<<5);//设置为开漏模式
     }
+    else if(I2C0_SDA == PTD9)
+    {
+      PORTD_PCR9 = PORT_PCR_MUX(2);
+      PORTD_PCR9 = PORTD_PCR9|(1<<5);//设置为开漏模式
+    } 
     else if (I2C1_SDA == PTC15)
     {
       PORTC_PCR15 = PORT_PCR_MUX(2);

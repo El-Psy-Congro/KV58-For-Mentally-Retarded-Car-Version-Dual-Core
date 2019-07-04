@@ -43,7 +43,7 @@ CURRENTMODE=_ "4"
 [PE_DEVICE]
 CHIPMODE=_ "NXP_KVx_KV58F1M0M24"
 [DebugChecksum]
-Checksum=-305032559
+Checksum=1420299400
 [Exceptions]
 StopOnUncaught=_ 0
 StopOnThrow=_ 0
@@ -55,7 +55,7 @@ MixedMode=1
 MEMORYSTART1=_ "0"
 MEMORYSTART2=_ "0"
 MEMORYSTART3=_ "0"
-DEFAULT_SOURCE_PATH=_ "C:\Program Files\IAR Systems\Embedded Workbench 7.5\arm\bin\pemicro\P&E"
+DEFAULT_SOURCE_PATH=_ "F:\Program Files (x86)\IAR Systems\Embedded Workbench 7.5\arm\bin\pemicro\P&E"
 [PE_STARTUP12]
 show_hstep_assembly_details_new=_ "0"
 [PE_ARM]
@@ -275,5 +275,6 @@ mode=0
 Bp0=_ 0 "EMUL_DATA" "UART_Put_Buff" 0 0 0 0 4294967295
 Count=1
 [Aliases]
-Count=0
-SuppressDialog=0
+A0=_ "D:\桌面文件\测试专用库\LQ_KV58F24第3版20180424\LQ_KV58F24第3版\LQ_KV58F24第3版20181120\LQuser\devices\startup\startup.c" ""
+Count=1
+SuppressDialog=1

@@ -38,7 +38,7 @@ extern uint8_t u16ftflogo[];
 extern uint8_t lqLCD12864[16384];
 extern uint8_t gImage_lo[17280];
 extern uint8_t gImage_Battery_B[900];
-extern uint8_t gImage_title2[5152];
+//extern uint8_t gImage_title2[5152];
 extern uint8_t gImage_title[8320];
 extern uint8_t gImage_1[40960];
 extern uint8_t gImage_2[34560];

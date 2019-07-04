@@ -21,7 +21,7 @@ QQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQ*/
 #define IMAGEH  120  //行 HEIGHT 待采集摄像头图像高度行数
 #define IMAGEW  188  //列 WIDTH  待采集摄像头图像宽度列数
 
-#define GRAPH_HIGHT    120  //OLED显示的行数
+#define GRAPH_HIGHT    70  //OLED显示的行数
 #define GRAPH_WIDTH    94  //OLED显示的列数
 
 #define SCL_Out     DDRD11=1      //配置输出作为SCL_Out
@@ -74,9 +74,10 @@ void Cam_Init(void);
 void Get_Pixel(void);
 void Get_Back(void);
 void Draw_Road(void);
+void DrawRoad(void);
 void GetUseImage(void);
 void GetBinarizationValue(void);
-void Pixle_Filter(void);
+void GraphFilter(void);
 void SeekRoad(void);
 void FindTiXing(void);
 int MT9V034(void);

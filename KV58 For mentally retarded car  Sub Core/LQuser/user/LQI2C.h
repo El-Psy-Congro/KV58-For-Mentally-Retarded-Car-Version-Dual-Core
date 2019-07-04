@@ -20,11 +20,11 @@ QQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQ*/
 
 /**********************************  IIC(引脚复用) ***************************************/
 
-#define I2C0_SCL    PTC14       // PTB0、PTB2、PTE19 PTE24 PTA12 PTC6 PTC14 PTD2
-#define I2C0_SDA    PTC15       // PTB1、PTB3、PTE18 PTE25 PTA11 PTC7 PTC15 PTD3
+#define I2C0_SCL    PTB0       // PTB0、PTB2、PTE19 PTE24 PTA12 PTC6 PTC14 PTD2
+#define I2C0_SDA    PTB1       // PTB1、PTB3、PTE18 PTE25 PTA11 PTC7 PTC15 PTD3
 
-#define I2C1_SCL    PTC14       // PTD8 PTE1、PTC10 PTA14 PTC14 
-#define I2C1_SDA    PTC15       // PTD9 PTE0、PTC11 PTA13 PTC15
+#define I2C1_SCL    PTE1       // PTD8 、PTE1、PTC10 PTA14 PTC14 
+#define I2C1_SDA    PTE0       // PTD9、PTE0、PTC11 PTA13 PTC15
 
 /**********************************  IIC(引脚复用) ***************************************/
 

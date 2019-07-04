@@ -19,8 +19,9 @@ QQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQ*/
 
 #include "include.h"
 
-#define BEE_ON PTA27_OUT=0
-#define BEE_OFF PTA27_OUT=1
+#define BEE_ON PTD7_OUT=0
+#define BEE_OFF PTD7_OUT=1
+
 
 /*******************************************************************************
 * Definitions
@@ -43,8 +44,6 @@ typedef enum
   OFF=1, //Ãð
   RVS=2, //·´×ª  
 }LEDs_e;
-
-
 
 extern void LED_Init(void);
 extern void LED_Ctrl(LEDn_e ledno, LEDs_e sta);
