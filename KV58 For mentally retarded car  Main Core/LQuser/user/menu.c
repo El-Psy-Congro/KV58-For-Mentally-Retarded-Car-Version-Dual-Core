@@ -7,7 +7,7 @@
 #define NUMBER_OF_ERECT 4
 #define NUMBER_OF_ADC 8
 #define NUMBER_OF_GRAPH_SPREAD 2
-#define VARIATION_SPEED_PID 0.001
+#define VARIATION_SPEED_PID 0.1
 #define VARIATION_GRAPH_PID 0.1
 #define VARIATION_Electromagnetism_PID 0.01
 #define VARIATION_ERECT_PID 0.001
@@ -17,6 +17,7 @@
 
 #define THRESHOLDOFPAGE 10
 #define THRESHOLDOFADJUST 7
+
 
 /*
  * 菜单切换变量
@@ -48,15 +49,18 @@ char txt[16];
 void MenuInit(){
   if(monitorSelection == OLED){
     //OLED的菜单页放这里
-
     MenuPageAdd(OLEDMenuOfCameraImage);
+    MenuPageAdd(OLEDMenuOfCameraImageplus);
+    MenuPageAdd(OLEDMenuOfMotor);
+
     MenuPageAdd(OLEDMenuOfGraphPID);
     MenuPageAdd(OLEDMenuOfElectromagnetismPID);
-    MenuPageAdd(OLEDMenuOfMotor);
+
 //    MenuPageAdd(OLEDMenuOfMotorLeft);
 //    MenuPageAdd(OLEDMenuOfMotorRight);
 //    MenuPageAdd(OLEDMenuOfERECT);
     MenuPageAdd(OLEDMenuOfVoltage);
+    MenuPageAdd(OLEDMenuOfUltrasonic);
     MenuPageAdd(OLEDMenuOfADCshow);
     
     
@@ -78,10 +82,10 @@ void Menu(){
   /*
    * 编码开关
    */
-  if(CodingSwitch(FTM1, THRESHOLDOFPAGE) < 0){
+  if(CodingSwitch(speedRightGet, THRESHOLDOFPAGE) < 0){
     menus = menus->last;
     LCD_CLS();
-  }else if(CodingSwitch(FTM1, THRESHOLDOFPAGE) > 0){
+  }else if(CodingSwitch(speedRightGet, THRESHOLDOFPAGE) > 0){
     menus = menus->next;
     LCD_CLS();
   }
@@ -139,6 +143,13 @@ void OLEDMenuOfCameraImage(){
   sprintf(txt,"%03d",thresholdOfGraph);
   LCD_P6x8Str(100,1,(u8*)txt);
 }
+void OLEDMenuOfCameraImageplus(){
+  LCD_Show_Frame100();
+  DrawRoad();
+  LCD_P8x16Str(0,0,"GraphAdd");
+  sprintf(txt,"%03d",thresholdOfGraph);
+  LCD_P6x8Str(100,1,(u8*)txt);
+}
 
 /*
  * 电压观察
@@ -153,6 +164,13 @@ void OLEDMenuOfVoltage(){
   LCD_P6x8Str(0,4,(u8*)txt);
 }
 
+void OLEDMenuOfUltrasonic(){
+  sprintf(txt, "distance=%07d", len);
+  LCD_P8x16Str(0, 3, (u8*) txt);
+  
+  sprintf(txt, "Ultrasonic", len);
+  LCD_P8x16Str(0, 0, (u8*) txt);
+}
 
 /*
  * 直立PID参数调整
@@ -172,7 +190,7 @@ void OLEDMenuOfERECT(){
 /****
 编码
 **/
-  adjust = CodingSwitch(FTM2, THRESHOLDOFADJUST);
+  adjust = CodingSwitch(speedLeftGet, THRESHOLDOFADJUST);
   if(adjust){
     if(menuSwitch == 0){
       PIDErect.proportion += adjust*VARIATION_ERECT;
@@ -231,7 +249,7 @@ void OLEDMenuOfMotor(){
 /***
 编码
 **/
-  adjust = CodingSwitch(FTM2, THRESHOLDOFADJUST);
+  adjust = CodingSwitch(speedLeftGet, THRESHOLDOFADJUST);
   if(adjust){
     if(menuSwitch == 0){
       PIDMotor.proportion += adjust*VARIATION_SPEED_PID;
@@ -271,7 +289,7 @@ void OLEDMenuOfMotor(){
     LCD_P8x16Str(70, (menuSwitch + 1) * 2 - 4, ">");
   }
 
-
+  PIDMotorRight.setPoint = PIDMotorLeft.setPoint =   PIDMotor.setPoint;
   PIDMotorRight.proportion = PIDMotorLeft.proportion =   PIDMotor.proportion;
   PIDMotorRight.integral = PIDMotorLeft.integral =   PIDMotor.integral;
   PIDMotorRight.derivative = PIDMotorLeft.derivative =   PIDMotor.integral;
@@ -294,7 +312,7 @@ void OLEDMenuOfMotorRight(){
 /**
 编码
 **/
-  adjust = CodingSwitch(FTM2, THRESHOLDOFADJUST);
+  adjust = CodingSwitch(speedLeftGet, THRESHOLDOFADJUST);
   if(adjust){
     if(menuSwitch == 0){
       PIDMotorRight.proportion += adjust*VARIATION_SPEED_PID;
@@ -352,7 +370,7 @@ void OLEDMenuOfMotorLeft(){
 /***
 /**编码*
 **/
-  adjust = CodingSwitch(FTM2, THRESHOLDOFADJUST);
+  adjust = CodingSwitch(speedLeftGet, THRESHOLDOFADJUST);
   if(adjust){
     if(menuSwitch == 0){
       PIDMotorLeft.proportion += adjust*VARIATION_SPEED_PID;
@@ -408,7 +426,7 @@ void OLEDMenuOfGraphPID(){
   /*
    * 编码开关
    */
-  adjust = CodingSwitch(FTM2, THRESHOLDOFADJUST);
+  adjust = CodingSwitch(speedLeftGet, THRESHOLDOFADJUST);
   if(adjust){
     if(menuSwitch == 0){
       PIDServoOfGraph.proportion += adjust*VARIATION_GRAPH_PID;
@@ -473,7 +491,7 @@ void OLEDMenuOfElectromagnetismPID(){
 /***
 *编码
 */
-  adjust = CodingSwitch(FTM2, THRESHOLDOFADJUST);
+  adjust = CodingSwitch(speedLeftGet, THRESHOLDOFADJUST);
   if(adjust){
     if(menuSwitch == 0){
       PIDServoOfElectromagnetism.proportion += adjust*VARIATION_Electromagnetism_PID;

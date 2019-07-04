@@ -665,20 +665,20 @@ int VirtualOscilloscope(int *data)
 
   for(i=0;i<10;i++)
   {
-    UART_Put_Char(UART_4, databuf[i]);
+    UART_Put_Char(UART_0, databuf[i]);
   }
   return 0;
 }
 
 void VirtualOscilloscopeOfVcan(){
   int a =400;
-  UART_Put_Char(UART_4, 0x03);
-  UART_Put_Char(UART_4, 0xFC);
+  UART_Put_Char(UART_0, 0x03);
+  UART_Put_Char(UART_0, 0xFC);
 //  UART_Put_Char(UART_4, (a>>24));
 //  UART_Put_Char(UART_4, (a>>16));
 //  UART_Put_Char(UART_4, (a>>12));
 //  UART_Put_Char(UART_4, (a>>8));
-  UART_Put_Char(UART_4, 0xFC);
-  UART_Put_Char(UART_4, 0x03);
+  UART_Put_Char(UART_0, 0xFC);
+  UART_Put_Char(UART_0, 0x03);
 }
 

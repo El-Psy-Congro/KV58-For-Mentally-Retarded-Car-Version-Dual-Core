@@ -65,11 +65,8 @@ void PIT0_IRQHandler(){
   speedLeftGet = FTM_AB_Get(FTM2);
   speedRightGet = -FTM_AB_Get(FTM1);
   Motor_Duty(MotL, PIDPositional(speedLeftGet,  &PIDMotorLeft));
-  //Motor_Duty(MotL, 140);
   Motor_Duty(MotR, PIDPositional(speedRightGet, &PIDMotorRight));
-  //Motor_Duty(MotR, 140);
-  Servo_Duty(servo);
-//  speed=FTM_AB_Get(FTM2);     //开启正交解码后，可以获取速度，正负表示方向
+  Servo_Duty(LimitingAmplitudeVersionReturn(servo, 4700, 5900));
 }
 
 void PIT1_IRQHandler(){
@@ -84,10 +81,7 @@ void PIT2_IRQHandler(){
   PIT_Flag_Clear(PIT2);       //清中断标志位
 //  LED_Ctrl(LED3, RVS);
 //  GyroAngleProcessing();
-  isIslandLeft = false;
-  isIslandRight = false;
-  BEE_OFF;
-
+  Ultrasonic();
 
   /*用户添加所需代码*/
 }

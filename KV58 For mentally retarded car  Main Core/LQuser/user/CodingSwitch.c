@@ -10,14 +10,12 @@ int coding;
  *
  * PTC6 为拨码开关引脚
  */
-int CodingSwitch(FTM_Type * ftmn, u8 threshold){
+int CodingSwitch(int channelSelection, u8 threshold){
   gear = 0;
-  if(!IsMotorVoltage()){
-    PIDMotorLeft.sumError = 0;
-    PIDMotorRight.sumError = 0;        //当电机电源开关关闭时 消除电机PID 积分累计
-    
-    
-    coding = FTM_AB_Get(ftmn);
+  if(!IsMotorVoltage() && !GPIO_Get(PTB20)){
+
+
+    coding = channelSelection;
     if(coding > 0){
       while(coding > threshold){
          gear++;
@@ -33,7 +31,7 @@ int CodingSwitch(FTM_Type * ftmn, u8 threshold){
 
   }
 
-  time_delay_ms(20);
+  time_delay_ms(1);
   return gear;
 }
 

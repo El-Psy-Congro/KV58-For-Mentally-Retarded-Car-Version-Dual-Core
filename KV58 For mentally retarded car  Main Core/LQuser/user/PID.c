@@ -51,6 +51,7 @@ PID
   PIDMotorLeft, PIDMotorRight,
   PIDErect,
   PIDMotor,
+  PIDMotorForAccelerate,
   fuzzyPIDServo;
 
 deviation graphic, inductance;                                    //基于中线的偏差
@@ -58,22 +59,23 @@ int speedSet = 0;
 
 void PIDInit(){
   PIDServoOfGraph.setPoint = 0;
-  PIDServoOfGraph.proportion = 9;  //0.27
+  PIDServoOfGraph.proportion = 12;  //0.27
   PIDServoOfGraph.integral = 0;
   PIDServoOfGraph.derivative = 0;
   PIDServoOfGraph.isDeviation = false;
 
   PIDServoOfElectromagnetism.setPoint = 0;
-  PIDServoOfElectromagnetism.proportion = 0.08;  //0.27
+  PIDServoOfElectromagnetism.proportion = 0.10;  //0.27
   PIDServoOfElectromagnetism.integral = 0;
   PIDServoOfElectromagnetism.derivative = 0.20;
   PIDServoOfElectromagnetism.isDeviation = false;
 
-  PIDMotor.setPoint = 140;
-  PIDMotor.proportion = 0.100;
-  PIDMotor.integral = 0.200;
+  PIDMotor.setPoint = 70;
+  PIDMotor.proportion = 1.000;
+  PIDMotor.integral = 0.1;
   PIDMotor.derivative = 0;
   PIDMotor.isDeviation = true;
+
 
   PIDMotorLeft.setPoint = 140;
   PIDMotorLeft.proportion = 0.200;
