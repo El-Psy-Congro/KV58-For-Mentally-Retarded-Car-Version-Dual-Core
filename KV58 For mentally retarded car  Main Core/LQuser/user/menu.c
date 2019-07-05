@@ -52,6 +52,7 @@ void MenuInit(){
     MenuPageAdd(OLEDMenuOfCameraImage);
     MenuPageAdd(OLEDMenuOfCameraImageplus);
     MenuPageAdd(OLEDMenuOfMotor);
+    MenuPageAdd(OLEDMenuOfUltrasonic);
 
     MenuPageAdd(OLEDMenuOfGraphPID);
     MenuPageAdd(OLEDMenuOfElectromagnetismPID);
@@ -61,8 +62,8 @@ void MenuInit(){
 //    MenuPageAdd(OLEDMenuOfERECT);
     MenuPageAdd(OLEDMenuOfVoltage);
     MenuPageAdd(OLEDMenuOfADCshow);
-    
-    
+
+
   }else if(monitorSelection == TFT){
     //TFT1.8µÄ²Ëµ¥Ò³·ÅÕâÀï
     MenuPageAdd(TFTMenuOfMT9V034);
@@ -89,7 +90,7 @@ void Menu(){
     LCD_CLS();
   }
 
-    
+
 
     (*menus->page)();
 }
@@ -133,6 +134,17 @@ void TFTMenuOfMT9V034(){
 }
 
 /*
+ * ³¬Éù²¨²â¾àÏÔÊ¾
+ */
+void OLEDMenuOfUltrasonic(){
+  sprintf(txt, "distance=%07d", len);
+  LCD_P8x16Str(0, 3, (u8*) txt);
+
+  sprintf(txt, "Ultrasonic", len);
+  LCD_P8x16Str(0, 0, (u8*) txt);
+}
+
+/*
  * ÉãÏñÍ·Í¼ÏñÏÔÊ¾
  */
 void OLEDMenuOfCameraImage(){
@@ -157,10 +169,10 @@ void OLEDMenuOfVoltage(){
   IsMotorVoltage();
   IsServoVoltage();
   sprintf(txt,"%04d",voltageMotor);
-  LCD_P6x8Str(0,0,(u8*)txt);
+  LCD_P6x8Str(40,0,(u8*)txt);
 
   sprintf(txt,"%04d",voltageServo);
-  LCD_P6x8Str(0,4,(u8*)txt);
+  LCD_P6x8Str(40,4,(u8*)txt);
 }
 
 
@@ -178,7 +190,7 @@ void OLEDMenuOfERECT(){
 
 
   menuSwitch = menuSwitch % NUMBER_OF_ERECT;
-  
+
 /****
 ±àÂë
 **/
@@ -358,7 +370,7 @@ void OLEDMenuOfMotorLeft(){
     }
   }
   menuSwitch = menuSwitch % NUMBER_OF_MOTOR;
-  
+
 /***
 /**±àÂë*
 **/
@@ -456,7 +468,7 @@ void OLEDMenuOfGraphPID(){
 
 
   LCD_P8x16Str(0,0,"Graph PID");
-    
+
   if(menuSwitch == 3){
   LCD_P8x16Str(70,4,">");
   }else{
@@ -479,7 +491,7 @@ void OLEDMenuOfElectromagnetismPID(){
     }
   }
   menuSwitch = menuSwitch%NUMBER_OF_PID;
-  
+
 /***
 *±àÂë
 */
@@ -609,32 +621,32 @@ void OLEDMenuOfADCshow(){
 
   LCD_CLS();
 
-  sprintf(txt,"%d|",ADC0_Ave(L_0,ADC_16bit,10));  
+  sprintf(txt,"%d|",ADC0_Ave(L_0,ADC_16bit,10));
   LCD_P8x16Str(0,0,(u8*)txt);
 
-  sprintf(txt,"%d|",ADC0_Ave(L_1,ADC_16bit,10));  
+  sprintf(txt,"%d|",ADC0_Ave(L_1,ADC_16bit,10));
   LCD_P8x16Str(0,2,(u8*)txt);
-  
-  sprintf(txt,"%d|",ADC0_Ave(L_2,ADC_16bit,10));  
+
+  sprintf(txt,"%d|",ADC0_Ave(L_2,ADC_16bit,10));
   LCD_P8x16Str(0,4,(u8*)txt);
 
-  sprintf(txt,"%d|",ADC0_Ave(L_3,ADC_16bit,10));  
+  sprintf(txt,"%d|",ADC0_Ave(L_3,ADC_16bit,10));
   LCD_P8x16Str(0,6,(u8*)txt);
 
-  
-  sprintf(txt,"%d|",ADC0_Ave(L_4,ADC_16bit,10));  
+
+  sprintf(txt,"%d|",ADC0_Ave(L_4,ADC_16bit,10));
   LCD_P8x16Str(80,0,(u8*)txt);
 
-  
-  sprintf(txt,"%d|",ADC0_Ave(L_5,ADC_16bit,10));  
+
+  sprintf(txt,"%d|",ADC0_Ave(L_5,ADC_16bit,10));
   LCD_P8x16Str(80,2,(u8*)txt);
 
-  
-  sprintf(txt,"%d|",ADC0_Ave(L_6,ADC_16bit,10));  
+
+  sprintf(txt,"%d|",ADC0_Ave(L_6,ADC_16bit,10));
   LCD_P8x16Str(80,4,(u8*)txt);
 
-  
-  sprintf(txt,"%d|",ADC0_Ave(L_7,ADC_16bit,10));  
+
+  sprintf(txt,"%d|",ADC0_Ave(L_7,ADC_16bit,10));
   LCD_P8x16Str(80,6,(u8*)txt);
 
 

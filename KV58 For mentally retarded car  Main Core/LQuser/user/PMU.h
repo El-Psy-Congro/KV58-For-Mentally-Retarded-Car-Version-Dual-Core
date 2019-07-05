@@ -6,5 +6,6 @@ extern uint16_t
   voltageServo;
 
 bool IsServoVoltage();
+bool IsMotorVoltage();
 
 #endif

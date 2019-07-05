@@ -57,6 +57,7 @@ bool IsGraphProcessingOfFinishLine();                                       //终
 bool IsModeSwitch();
 void GraphProcessingOfEnteringStraightLaneAccelerate();                     //直道加速
 int GraphProcessingOfCannyEdgeDetection();                                  //canny直线检测                 未完成 且计算量大后面应该不会去写了
+void GraphProcessingOfProspectadjustment(u16 aline);                        //摄像头前瞻调整
 
 void DifferentialSpeed();                                                   //差速
 

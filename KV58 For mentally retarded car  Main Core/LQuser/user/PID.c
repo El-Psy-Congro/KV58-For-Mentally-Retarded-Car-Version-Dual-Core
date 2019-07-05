@@ -1,12 +1,12 @@
 #include "include.h"
 
-#define NL  4.0
-#define NM  2.0
+#define NL  8.0
+#define NM  4.0
 #define NS  1.0
 #define ZO  0.0
 #define PS  1.0
-#define PM  2.0
-#define PL  4.0
+#define PM  4.0
+#define PL  8.0
 
 #define INDEXMIN 0
 #define INDEXMAX 6
@@ -59,7 +59,7 @@ int speedSet = 0;
 
 void PIDInit(){
   PIDServoOfGraph.setPoint = 0;
-  PIDServoOfGraph.proportion = 12;  //0.27
+  PIDServoOfGraph.proportion = 9;  //0.27
   PIDServoOfGraph.integral = 0;
   PIDServoOfGraph.derivative = 0;
   PIDServoOfGraph.isDeviation = false;
@@ -70,7 +70,7 @@ void PIDInit(){
   PIDServoOfElectromagnetism.derivative = 0.20;
   PIDServoOfElectromagnetism.isDeviation = false;
 
-  PIDMotor.setPoint = 70;
+  PIDMotor.setPoint = 50;
   PIDMotor.proportion = 1.000;
   PIDMotor.integral = 0.1;
   PIDMotor.derivative = 0;

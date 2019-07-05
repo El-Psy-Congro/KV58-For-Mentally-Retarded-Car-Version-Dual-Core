@@ -25,6 +25,8 @@ bool IsMotorVoltage(){
 bool IsServoVoltage(){
   voltageServo = ADC0_Ave(ADC0_DP0,ADC_12bit,10)*22/52;
   if(voltageServo < 600){
+    LCD_P14x16Str(0, 0, "µçÑ¹µÍ");
+    while(1);
     return false;
   }
   return true;

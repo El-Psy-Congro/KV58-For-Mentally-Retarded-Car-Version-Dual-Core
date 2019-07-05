@@ -20,7 +20,8 @@ void OLEDMenuOfADCMedia();
 void OLEDMenuOfSpeedMeasure();
 void OLEDMenuOfERECT();
 void OLEDMenuOfVoltage();
-                                                        
+void OLEDMenuOfUltrasonic();
+
 
 /****************TFT1.8²Ëµ¥Ò³ÏÔÊ¾º¯Êý**************/
 void TFTMenuOfMT9V034();
@@ -44,4 +45,4 @@ typedef enum{
 
 extern monitor monitorSelection;
 
-#endif 
+#endif

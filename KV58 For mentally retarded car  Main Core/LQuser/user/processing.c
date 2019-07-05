@@ -43,13 +43,14 @@ s16
   edgeRight[GRAPH_HIGHT],               //左右边界
   graphicMedian[GRAPH_HIGHT] = 47;       //每一行图像中值
   
-s16 laneWidth[GRAPH_HIGHT] = {10,10,10,10,10,10,10,10,11,13,      //道路宽度     应梯形形变所以宽度不一
-                              13,15,16,17,19,19,20,22,23,24,
-                              25,26,27,28,30,30,32,33,34,35,
-                              37,38,38,40,41,42,43,45,45,47,
-                              48,48,50,51,52,53,55,55,57,58,
-                              59,60,61,62,64,64,65,67,67,69,
-                              70,71,72,73,74,75,76,76,77,77,};
+s16 laneWidth[GRAPH_HIGHT] = {32, 32, 36, 37, 36, 36, 38, 39, 38, 39,
+                              38, 38, 38, 38, 39, 40, 39, 37, 39, 38,
+                              38, 39, 40, 41, 40, 42, 43, 44, 45, 47,
+                              47, 48, 49, 50, 52, 53, 54, 56, 57, 58,
+                              59, 59, 61, 62, 63, 64, 65, 66, 67, 68,
+                              70, 70, 72, 72, 74, 75, 76, 77, 78, 80,
+                              81, 82, 82, 83, 83, 84, 84, 85, 85, 85,
+};
 
 
 
@@ -108,6 +109,7 @@ int DataFusion(){
   GraphProcessing();
   ElectromagnetismProcessing();
   IsModeSwitch();
+  Ultrasonic();
 
   if(isGraph){//
     servo = servoMedian + PIDFuzzy(&graphic, &PIDServoOfGraph);
@@ -118,7 +120,7 @@ int DataFusion(){
 
   }
   if(IsGraphProcessingOfFinishLine()){
-    isStop = true;
+    isStop = false;
   }
     
 
@@ -126,10 +128,8 @@ int DataFusion(){
     PIDMotor.setPoint = 0;
 //    BEE_OFF;
   }else{
-    PIDMotor.setPoint = 70;
-//    GraphProcessingOfEnteringStraightLaneAccelerate();
+    PIDMotor.setPoint = 80;
   }
-
 
   DifferentialSpeed();
   
@@ -265,27 +265,17 @@ int GraphProcessingOfEdgeFluctuation(){
     if(isEdgeLeft[i] || isEdgeRight[i]){
       isEdgeMedian[i] = true;
       graph[i][graphicMedian[i]] = 0;
+
+    }
+
+    if(isEdgeMedian[i] && i>LINE_INITIAL-10 || isEdgeMedian[i] && isEdgeMedian[i+1] && isEdgeMedian[i+2]){
       prospect = i;
     }
 
   }
 
-  if(prospect < 40){
-    line = 40;
-  }
 
-  for(int i = line; i < LINE_INITIAL; i++){
-    if(isEdgeMedian[i]){
-      line = i;
-    }
-  }
-  line = 45;
-
-  if(isEdgeMedian[line]){
-    isGraph = true;
-  }else{
-  }
-
+  GraphProcessingOfProspectadjustment(35);
 
   
 /***********************环岛判断******************************/
@@ -308,6 +298,8 @@ int GraphProcessingOfEdgeFluctuation(){
 
   }
 
+
+
 //  for(int i = 14; i<40; i++){
 //    if(isEdgeLeft[i] || isEdgeRight[i]){
 //      return graphicMedian[i];
@@ -315,24 +307,42 @@ int GraphProcessingOfEdgeFluctuation(){
 //  }
 
   if(isEdgeLeft[line] && !isEdgeRight[line]){
-    graphicMedian[line] = edgeLeft[line] + laneWidth[line];
+    graphicMedian[line] = edgeLeft[line] + laneWidth[line]/2;
   }else if(!isEdgeLeft[line] && isEdgeRight[line]){
-    graphicMedian[line] = edgeRight[line] - laneWidth[line];
+    graphicMedian[line] = edgeRight[line] - laneWidth[line]/2;
   }
 
 //  for(int i = ){
 //  }
   u8 tex[16];
-  sprintf(tex,"%03d",graphicMedian[line]);
+  sprintf(tex,"%02d",prospect);
+  LCD_P6x8Str(0,2,(u8*)tex);
+  sprintf(tex,"%02d",graphicMedian[line]);
+  LCD_P6x8Str(0,6,(u8*)tex);
+  sprintf(tex,"%02d",line);
   LCD_P6x8Str(0,4,(u8*)tex);
   graph[line][graphicMedian[line]] = 0;
   return graphicMedian[line];
 }
 
-/*
- *
- */
+void GraphProcessingOfProspectadjustment(u16 aline){
 
+  if(prospect < aline){
+    line = aline;
+  }
+
+  for(int i = line; i < LINE_INITIAL; i++){
+    if(isEdgeMedian[i]){
+      line = i;
+      break;
+    }
+  }
+
+
+  if(isEdgeMedian[line]){
+    isGraph = true;
+  }
+}
 
 /*
  * 从中间向两边扫描
@@ -418,6 +428,9 @@ int GraphProcessingOfLineWhitePointCounting(int i, int n, int m){
   }
   return count;
 }
+
+
+
 
 
 /*
@@ -631,7 +644,7 @@ s16 GraphProcessingOfLineScanFromQuarters(int i){
  */
 void GraphProcessingOfEnteringStraightLaneAccelerate(){
 
-if(IsStraightLane()){
+if(IsStraightLane() && prospect < 25){
 //   BEE_ON;
     line = 25;
     PIDMotor.setPoint = 100;
@@ -639,7 +652,6 @@ if(IsStraightLane()){
   }else{
 //    BEE_OFF;
     PIDMotor.setPoint = 100;
-    line = 40;
     PIDServoOfGraph.proportion = 9;  //0.27
   }
 }
@@ -993,7 +1005,7 @@ void GyroAngleProcessing(){
 
 }
 void Ultrasonic(){
-  char txt[16];
+  len = 0;
   PTC14_OUT=1;
   LPTMR_delay_us(20);
   PTC14_OUT = 0;
@@ -1001,11 +1013,7 @@ void Ultrasonic(){
   while (GPIO_Get(PTC15) == 1) {
     len++;
     if (len > 100000) {
-      LCD_P8x16Str(10, 0, "ERROR");
       break;
     }
   }
-  sprintf(txt, "%07d", len);
-  LCD_P8x16Str(10, 6, (u8*) txt);
-  len = 0;
 }
