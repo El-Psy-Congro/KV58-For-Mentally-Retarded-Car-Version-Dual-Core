@@ -52,6 +52,7 @@ bool IsStaightLine(s16 line[], bool isExistence[], u8 initial, u8 half, u8 allow
 bool GraphProcessingOfEnteringIslandforLeftPreconditions();                 //左环岛前条件
 bool GraphProcessingOfEnteringIslandforLeft();                              //左环岛
 bool GraphProcessingOfEnteringIslandforRight();                             //右环岛
+bool GraphProcessingOfEnteringIslandofElectromagnetism();                             //环岛摄像头中采用电磁
 bool IsStraightLane();                                                      //直道判断
 bool IsGraphProcessingOfFinishLine();                                       //终点线判断
 bool IsModeSwitch();

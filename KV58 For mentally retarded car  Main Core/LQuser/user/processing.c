@@ -104,18 +104,19 @@ bool
 int DataFusion(){
   GetUseImage();                       //采集图像数据存放数组  移到了IsDisconnectRoad();
   thresholdOfGraph = GetOSTU(imageData);      //OSTU大津法 获取全局阈值
+  thresholdOfGraph = 160;
   GetBinarizationValue();              //二值化图像数据
   GraphFilter();
-  GraphProcessing();
   ElectromagnetismProcessing();
+  GraphProcessing();
   IsModeSwitch();
   Ultrasonic();
 
   if(isGraph){//
-    servo = servoMedian + PIDFuzzy(&graphic, &PIDServoOfGraph);
-    BEE_OFF;
+    servo = servoMedian + PIDPositional(graphic.deviationNow, &PIDServoOfGraph);
+//    BEE_OFF;
   }else{
-    BEE_ON;
+//    BEE_ON;
     servo = servoMedian - PIDPositional(ElectromagnetismMedian, &PIDServoOfElectromagnetism);
 
   }
@@ -128,11 +129,11 @@ int DataFusion(){
     PIDMotor.setPoint = 0;
 //    BEE_OFF;
   }else{
-    PIDMotor.setPoint = 80;
+    PIDMotor.setPoint = 60;
+//    PIDMotor.setPoint = 1300/prospect;
   }
 
   DifferentialSpeed();
-  
 
 }
 
@@ -275,14 +276,28 @@ int GraphProcessingOfEdgeFluctuation(){
   }
 
 
-  GraphProcessingOfProspectadjustment(35);
+  GraphProcessingOfProspectadjustment(50);
 
+
+
+
+  if(GraphProcessingOfLineWhitePointCounting(line-1, 0, GRAPH_WIDTH-1) > 90 || GraphProcessingOfLineWhitePointCounting(line-3, 0, GRAPH_WIDTH-1) > 90){
+    isGraph = false;
+  }
   
 /***********************环岛判断******************************/
-  if(GraphProcessingOfEnteringIslandforLeft()){
-    isIslandLeft = true;
-  }else if(GraphProcessingOfEnteringIslandforRight()){
-    isIslandRight = true;
+  if(GraphProcessingOfEnteringIslandofElectromagnetism()){
+    if(GraphProcessingOfEnteringIslandforLeft()){
+      BEE_ON;
+      isGraph = true;
+    }else if(0){
+      isGraph = true;
+      BEE_ON;
+    }else{
+      BEE_OFF;
+    }
+  }else{
+    BEE_OFF;
   }
 /************************************************************/
 //  IsStaightLine(edgeRight, isEdgeRight, 50, 30, 3, 0.5);
@@ -298,19 +313,21 @@ int GraphProcessingOfEdgeFluctuation(){
 
   }
 
-
-
 //  for(int i = 14; i<40; i++){
 //    if(isEdgeLeft[i] || isEdgeRight[i]){
 //      return graphicMedian[i];
 //    }
 //  }
 
+  
   if(isEdgeLeft[line] && !isEdgeRight[line]){
     graphicMedian[line] = edgeLeft[line] + laneWidth[line]/2;
   }else if(!isEdgeLeft[line] && isEdgeRight[line]){
     graphicMedian[line] = edgeRight[line] - laneWidth[line]/2;
   }
+  
+
+  
 
 //  for(int i = ){
 //  }
@@ -322,6 +339,8 @@ int GraphProcessingOfEdgeFluctuation(){
   sprintf(tex,"%02d",line);
   LCD_P6x8Str(0,4,(u8*)tex);
   graph[line][graphicMedian[line]] = 0;
+
+
   return graphicMedian[line];
 }
 
@@ -453,13 +472,20 @@ int GraphProcessingOfSquareAreaWhitePointCounting(int x, int y, int area){
   return count;
 }
 
+bool GraphProcessingOfEnteringIslandofElectromagnetism(){
+  if(AD_Data[0] > 30000 || AD_Data[1] > 30000 || AD_Data[2] > 30000 || AD_Data[4] > 30000 || AD_Data[5] > 30000 || AD_Data[6] > 30000){
+    return true;
+   }
+  return false;
+}
+
 
 bool GraphProcessingOfEnteringIslandforLeftPreconditions(){
-  if(IsStaightLine(edgeRight, isEdgeRight, 40, 35, 2, 0.9)){
-    islandLeftPreliminary = 20;
+  if(IsStaightLine(edgeRight, isEdgeRight, 40, 35, 1.7, 0.9)){
+//    islandLeftPreliminary = 20;
 //    BEE_ON;
   }else{
-    islandLeftPreliminary--;
+//    islandLeftPreliminary--;
 //    BEE_OFF;
   }
 }
@@ -474,63 +500,72 @@ bool GraphProcessingOfEnteringIslandforLeftPreconditions(){
  *          在检测尖角上面是否有大量黑点，尖角下面是否几乎全部为黑色
  */
 bool GraphProcessingOfEnteringIslandforLeft(){
-  GraphProcessingOfEnteringIslandforLeftPreconditions();
-  if(IsStaightLine(edgeRight, isEdgeRight, 45, 35, 2, 0.5)){
+
+
+//  GraphProcessingOfEnteringIslandforLeftPreconditions();
+//  if(IsStaightLine(edgeRight, isEdgeRight, 45, 35, 2, 0.5)){
     for(int i = LINE_TERMINATION; i < LINE_INITIAL - 7; i++){
       if(isEdgeLeft[i] && isEdgeLeft[i+1] && isEdgeLeft[i+2] && !isEdgeLeft[i+3] && !isEdgeLeft[i+4] && !isEdgeLeft[i+5]){
-        if(edgeLeft[i+2] < 11 || !isEdgeRight[i+2] || !isEdgeRight[i+3] || !isEdgeRight[i+5] || !isEdgeRight[i+6]){
+        if(edgeLeft[i+2] < 7){
           continue;
         }
         if(GraphProcessingOfSquareAreaWhitePointCounting(i+2, edgeLeft[i+2]-5, 11) < 50
-        && GraphProcessingOfSquareAreaWhitePointCounting(i+2, edgeLeft[i+2]-5, 11) > 7
-        && GraphProcessingOfSquareAreaWhitePointCounting(i+2+12, edgeLeft[i+2]-5, 11) > 119){
+        && GraphProcessingOfSquareAreaWhitePointCounting(i+2+12, edgeLeft[i+2]-5, 11) > 90){
+//          graph[i+2][edgeLeft[i+2]-5] = 0;
+//          graph[i+2][edgeLeft[i+2]-4] = 0;
+//          graph[i+2][edgeLeft[i+2]-3] = 0;
+//          graph[i+2][edgeLeft[i+2]-2] = 0;
+//          graph[i+2][edgeLeft[i+2]-1] = 0;
+//          graph[i+2][edgeLeft[i+2]-1] = 0;
+//          graph[i+2][edgeLeft[i+2]+1] = 0;
+//          graph[i+2][edgeLeft[i+2]+2] = 0;
+//          graph[i+2][edgeLeft[i+2]+3] = 0;
+//          graph[i+2][edgeLeft[i+2]+4] = 0;
+//
+//
+//          graph[i+2-11][edgeLeft[i+2]-5] = 0;
+//          graph[i+2-11][edgeLeft[i+2]-4] = 0;
+//          graph[i+2-11][edgeLeft[i+2]-3] = 0;
+//          graph[i+2-11][edgeLeft[i+2]-2] = 0;
+//          graph[i+2-11][edgeLeft[i+2]-1] = 0;
+//          graph[i+2-11][edgeLeft[i+2]-1] = 0;
+//          graph[i+2-11][edgeLeft[i+2]+1] = 0;
+//          graph[i+2-11][edgeLeft[i+2]+2] = 0;
+//          graph[i+2-11][edgeLeft[i+2]+3] = 0;
+//          graph[i+2-11][edgeLeft[i+2]+4] = 0;
+//
+//          graph[i+2-11][edgeLeft[i+2]-5] = 0;
+//          graph[i+2-1][edgeLeft[i+2]-5] = 0;
+//          graph[i+2-2][edgeLeft[i+2]-5] = 0;
+//          graph[i+2-3][edgeLeft[i+2]-5] = 0;
+//          graph[i+2-4][edgeLeft[i+2]-5] = 0;
+//          graph[i+2-5][edgeLeft[i+2]-5] = 0;
+//          graph[i+2-6][edgeLeft[i+2]-5] = 0;
+//          graph[i+2-7][edgeLeft[i+2]-5] = 0;
+//          graph[i+2-8][edgeLeft[i+2]-5] = 0;
+//          graph[i+2-9][edgeLeft[i+2]-5] = 0;
+//          graph[i+2-10][edgeLeft[i+2]-5] = 0;
+//
+//          graph[i+2-11][edgeLeft[i+2]+5] = 0;
+//          graph[i+2-1][edgeLeft[i+2]+5] = 0;
+//          graph[i+2-2][edgeLeft[i+2]+5] = 0;
+//          graph[i+2-3][edgeLeft[i+2]+5] = 0;
+//          graph[i+2-4][edgeLeft[i+2]+5] = 0;
+//          graph[i+2-5][edgeLeft[i+2]+5] = 0;
+//          graph[i+2-6][edgeLeft[i+2]+5] = 0;
+//          graph[i+2-7][edgeLeft[i+2]+5] = 0;
+//          graph[i+2-8][edgeLeft[i+2]+5] = 0;
+//          graph[i+2-9][edgeLeft[i+2]+5] = 0;
+//          graph[i+2-10][edgeLeft[i+2]+5] = 0;
 
-          graph[i+2][edgeLeft[i+2]-5] = 0;
-          graph[i+2][edgeLeft[i+2]-4] = 0;
-          graph[i+2][edgeLeft[i+2]-3] = 0;
-          graph[i+2][edgeLeft[i+2]-2] = 0;
-          graph[i+2][edgeLeft[i+2]-1] = 0;
-          graph[i+2][edgeLeft[i+2]-1] = 0;
-          graph[i+2][edgeLeft[i+2]+1] = 0;
-          graph[i+2][edgeLeft[i+2]+2] = 0;
-          graph[i+2][edgeLeft[i+2]+3] = 0;
-          graph[i+2][edgeLeft[i+2]+4] = 0;
 
 
-          graph[i+2-11][edgeLeft[i+2]-5] = 0;
-          graph[i+2-11][edgeLeft[i+2]-4] = 0;
-          graph[i+2-11][edgeLeft[i+2]-3] = 0;
-          graph[i+2-11][edgeLeft[i+2]-2] = 0;
-          graph[i+2-11][edgeLeft[i+2]-1] = 0;
-          graph[i+2-11][edgeLeft[i+2]-1] = 0;
-          graph[i+2-11][edgeLeft[i+2]+1] = 0;
-          graph[i+2-11][edgeLeft[i+2]+2] = 0;
-          graph[i+2-11][edgeLeft[i+2]+3] = 0;
-          graph[i+2-11][edgeLeft[i+2]+4] = 0;
+          line = i-1;
+          isEdgeLeft[line] = false;
+          isEdgeRight[line] = false;
+          GraphProcessingOfLineScanFromSettingPoint(line, 5);
 
-          graph[i+2-11][edgeLeft[i+2]-5] = 0;
-          graph[i+2-1][edgeLeft[i+2]-5] = 0;
-          graph[i+2-2][edgeLeft[i+2]-5] = 0;
-          graph[i+2-3][edgeLeft[i+2]-5] = 0;
-          graph[i+2-4][edgeLeft[i+2]-5] = 0;
-          graph[i+2-5][edgeLeft[i+2]-5] = 0;
-          graph[i+2-6][edgeLeft[i+2]-5] = 0;
-          graph[i+2-7][edgeLeft[i+2]-5] = 0;
-          graph[i+2-8][edgeLeft[i+2]-5] = 0;
-          graph[i+2-9][edgeLeft[i+2]-5] = 0;
-          graph[i+2-10][edgeLeft[i+2]-5] = 0;
 
-          graph[i+2-11][edgeLeft[i+2]+5] = 0;
-          graph[i+2-1][edgeLeft[i+2]+5] = 0;
-          graph[i+2-2][edgeLeft[i+2]+5] = 0;
-          graph[i+2-3][edgeLeft[i+2]+5] = 0;
-          graph[i+2-4][edgeLeft[i+2]+5] = 0;
-          graph[i+2-5][edgeLeft[i+2]+5] = 0;
-          graph[i+2-6][edgeLeft[i+2]+5] = 0;
-          graph[i+2-7][edgeLeft[i+2]+5] = 0;
-          graph[i+2-8][edgeLeft[i+2]+5] = 0;
-          graph[i+2-9][edgeLeft[i+2]+5] = 0;
-          graph[i+2-10][edgeLeft[i+2]+5] = 0;
           return true;
         }else{
 
@@ -538,7 +573,7 @@ bool GraphProcessingOfEnteringIslandforLeft(){
 
       }
     }
-  }
+//  }
 
   return false;
 }
@@ -555,15 +590,14 @@ bool GraphProcessingOfEnteringIslandforLeft(){
  *          在检测尖角上面是否有大量黑点，尖角下面是否几乎全部为黑色
  */
 bool GraphProcessingOfEnteringIslandforRight(){
-  if(IsStaightLine(edgeLeft, isEdgeLeft, 45, 35, 2, 0.5)){
-    for(int i = LINE_TERMINATION; i < LINE_INITIAL - 7; i++){
+
+    for(int i = LINE_TERMINATION; i < LINE_INITIAL - 5; i++){
       if(isEdgeRight[i] && isEdgeRight[i+1] && isEdgeRight[i+2] && !isEdgeRight[i+3] && !isEdgeRight[i+4] && !isEdgeRight[i+5]){
-        if(edgeRight[i+2] > 72 || !isEdgeLeft[i+2] || !isEdgeLeft[i+3] || !isEdgeLeft[i+5] || !isEdgeLeft[i+6]){
+        if(edgeRight[i+2] > 89){
           continue;
         }
         if(GraphProcessingOfSquareAreaWhitePointCounting(i+2, edgeRight[i+2]-5, 11) < 50
-        && GraphProcessingOfSquareAreaWhitePointCounting(i+2, edgeRight[i+2]-5, 11) > 7
-        && GraphProcessingOfSquareAreaWhitePointCounting(i+2+12, edgeRight[i+2]-5, 11) > 119){
+        && GraphProcessingOfSquareAreaWhitePointCounting(i+2+12, edgeRight[i+2]-5, 11) > 90){
 
           graph[i+2][edgeRight[i+2]-5] = 0;
           graph[i+2][edgeRight[i+2]-4] = 0;
@@ -611,6 +645,12 @@ bool GraphProcessingOfEnteringIslandforRight(){
           graph[i+2-8][edgeRight[i+2]+5] = 0;
           graph[i+2-9][edgeRight[i+2]+5] = 0;
           graph[i+2-10][edgeRight[i+2]+5] = 0;
+
+          line = i-1;
+          isEdgeLeft[line] = false;
+          isEdgeRight[line] = false;
+          GraphProcessingOfLineScanFromSettingPoint(line, 89);
+
           return true;
         }else{
 
@@ -618,7 +658,7 @@ bool GraphProcessingOfEnteringIslandforRight(){
 
       }
     }
-  }
+
 
   return false;
 }
@@ -830,7 +870,7 @@ bool IsStraightLane(){
 }
 
 int ElectromagnetismProcessing(){
-  ElectromagnetismMedian = ElectromagnetismProcessingOfBasics2();
+  ElectromagnetismMedian = ElectromagnetismProcessingOfBasicsPlus();
   return 0;
 }
 
@@ -855,6 +895,7 @@ int ElectromagnetismProcessingOfBasics(){
         AD_Data[ia]=admin[ia];
         ADvalue[ia]=(float)(400*(AD_Data[ia]-admin[ia])/(admax[ia]-admin[ia]));
     }
+
 
 
 
@@ -890,7 +931,7 @@ int ElectromagnetismProcessingOfBasics(){
 
 
 }
-int ElectromagnetismProcessingOfBasics2(){
+int ElectromagnetismProcessingOfBasicsPlus(){
 
 
   inductance.deviationLast = inductance.deviationNow;
@@ -915,10 +956,7 @@ int ElectromagnetismProcessingOfBasics2(){
 
 
 
-  if(ElectromagnetismProcessingOfIsland()){
-    BEE_ON;
-    return -(35000-AD_Data3)/6;
-  }
+
 
 
 

@@ -81,8 +81,9 @@ void PIT2_IRQHandler(){
   PIT_Flag_Clear(PIT2);       //清中断标志位
 //  LED_Ctrl(LED3, RVS);
 //  GyroAngleProcessing();
-  Ultrasonic();
-
+  VirtualOscilloscopeData[0] = AD_Data2;
+  VirtualOscilloscopeData[1] = AD_Data4;
+  VirtualOscilloscope(VirtualOscilloscopeData);
   /*用户添加所需代码*/
 }
 
@@ -90,6 +91,8 @@ void PIT3_IRQHandler()
 {
   PIT_Flag_Clear(PIT3);       //清中断标志位
   Menu();
+
+
   /*用户添加所需代码*/
 }
 

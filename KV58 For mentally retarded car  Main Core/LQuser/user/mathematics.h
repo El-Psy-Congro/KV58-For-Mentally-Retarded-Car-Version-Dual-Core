@@ -10,4 +10,16 @@
 void LimitingAmplitude(int *value, int min, int max);
 int LimitingAmplitudeVersionReturn(int value, int min, int max);
 
+
+
+typedef struct {
+  int x,y;
+}point;
+
+
+typedef struct{
+  point Center;
+  int radius;
+}circular;
+
 #endif

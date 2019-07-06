@@ -1,12 +1,12 @@
 #include "include.h"
 
-#define NL  8.0
-#define NM  4.0
-#define NS  1.0
+#define NL  3.0
+#define NM  1.5
+#define NS  0.5
 #define ZO  0.0
-#define PS  1.0
-#define PM  4.0
-#define PL  8.0
+#define PS  0.5
+#define PM  1.5
+#define PL  3.0
 
 #define INDEXMIN 0
 #define INDEXMAX 6
@@ -59,20 +59,20 @@ int speedSet = 0;
 
 void PIDInit(){
   PIDServoOfGraph.setPoint = 0;
-  PIDServoOfGraph.proportion = 9;  //0.27
+  PIDServoOfGraph.proportion = 11.4;
   PIDServoOfGraph.integral = 0;
   PIDServoOfGraph.derivative = 0;
   PIDServoOfGraph.isDeviation = false;
 
   PIDServoOfElectromagnetism.setPoint = 0;
-  PIDServoOfElectromagnetism.proportion = 0.10;  //0.27
+  PIDServoOfElectromagnetism.proportion = 0.13;  
   PIDServoOfElectromagnetism.integral = 0;
   PIDServoOfElectromagnetism.derivative = 0.20;
   PIDServoOfElectromagnetism.isDeviation = false;
 
   PIDMotor.setPoint = 50;
-  PIDMotor.proportion = 1.000;
-  PIDMotor.integral = 0.1;
+  PIDMotor.proportion = 20.000;
+  PIDMotor.integral = 5;
   PIDMotor.derivative = 0;
   PIDMotor.isDeviation = true;
 
@@ -95,7 +95,7 @@ void PIDInit(){
   PIDErect.derivative = 0;
   PIDErect.isDeviation = false;
 
-  graphic.interval = 5;
+  graphic.interval = 4;
   inductance.interval = 6;
 
 }
@@ -296,11 +296,11 @@ int PIDFuzzy(deviation *aDeviation, PID *aPID){
   aPID->lastError = currentError;
 
   if(aPID->isDeviation){
-    return (int)( tempPID->proportion * proportionVariable
+    return (int)(tempPID->proportion * proportionVariable
                 + aPID->integral * integralVariable
                 + aPID->derivative * derivativeVariable);
   }else{
-    return (int)( aPID->setPoint
+    return (int)(aPID->setPoint
                + tempPID->proportion * proportionVariable
                + aPID->integral * integralVariable
                + aPID->derivative * derivativeVariable);
